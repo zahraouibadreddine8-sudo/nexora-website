@@ -947,6 +947,8 @@ body.loaded .pipeline-wrap{ animation:riseFade 1.1s var(--ease) .35s both; }
       <p class="modal-sub">Tell us about your product and goals — we'll get back to you with relevant creators.</p>
 
       <form id="brandForm" data-form-type="brand" novalidate>
+         <input type="hidden" name="access_key" value="32b2e5f2-5b4f-456c-be87-1b58b6057fdc">
+<input type="hidden" name="subject" value="New Nexora Campaign Request">
         <div class="form-grid">
           <div class="field">
             <label for="bName" class="required">Name</label>
@@ -1263,20 +1265,38 @@ body.loaded .pipeline-wrap{ animation:riseFade 1.1s var(--ease) .35s both; }
       payload.type = form.getAttribute('data-form-type');
       payload.submittedAt = new Date().toISOString();
 
-      // TODO: connect to a backend / form service, e.g.:
-      // fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      console.log('Nexora form submission (frontend only):', payload);
+   fetch('https://api.web3forms.com/submit', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
+.then(async response => {
+  const result = await response.json();
 
-      setTimeout(function(){
-        form.classList.add('hide');
-        success.classList.add('show');
-        success.setAttribute('tabindex', '-1');
-        success.focus();
-        btn.disabled = false;
-        btnText.textContent = originalLabel;
-        submitting = false;
-      }, 600);
-    });
+  if (result.success) {
+    form.classList.add('hide');
+    success.classList.add('show');
+    success.setAttribute('tabindex', '-1');
+    success.focus();
+
+    btn.disabled = false;
+    btnText.textContent = originalLabel;
+    submitting = false;
+  } else {
+    throw new Error(result.message || 'Form submission failed');
+  }
+})
+.catch(error => {
+  console.error('Nexora form submission error:', error);
+  alert('Something went wrong. Please try again.');
+
+  btn.disabled = false;
+  btnText.textContent = originalLabel;
+  submitting = false;
+});
   }
   wireForm('brandForm', 'brandSuccess');
   wireForm('creatorForm', 'creatorSuccess');
