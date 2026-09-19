@@ -2084,12 +2084,151 @@ svg {
 .star-rating label:hover svg,.star-rating label:hover~label svg,.star-rating input:checked~label svg{fill:currentColor;filter:drop-shadow(0 5px 8px rgb(107 76 246 / .18))}
 .star-rating input:focus-visible+label{outline:2px solid #6b4cf6;outline-offset:4px;border-radius:8px}
 .rating-hint{display:block;margin-top:8px;color:var(--text-secondary);font-size:.76rem}
-.success-review-prompt{margin-top:24px;padding:18px 20px;border:1px solid #ded9f5;border-radius:14px;background:#faf9ff;max-width:520px}
-.success-review-prompt>p{margin:0 0 13px!important;color:var(--text-secondary)}
-.success-review-prompt strong{color:var(--ink)}
-.success-review-link{display:inline-flex!important}
-.success-review-star{width:18px!important;height:18px!important;fill:currentColor;stroke:currentColor;stroke-width:1.4}
-@media(prefers-reduced-motion:reduce){.star-rating label,.star-rating label svg{transition:none!important;transform:none!important}}
+.success-review-prompt{
+  position:relative;
+  overflow:hidden;
+  margin-top:26px;
+  padding:22px 22px 20px;
+  border:1px solid #dcd6fb;
+  border-radius:16px;
+  background:linear-gradient(145deg,#fbfaff 0%,#f7f5ff 100%);
+  max-width:540px;
+  box-shadow:0 14px 38px rgb(61 42 151 / .06);
+  animation:reviewCardIn .58s cubic-bezier(.2,.75,.2,1) .18s both
+}
+.success-review-prompt::before{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  border-radius:999px;
+  right:-54px;
+  top:-62px;
+  background:radial-gradient(circle,rgb(98 71 232 / .12) 0%,rgb(98 71 232 / 0) 72%);
+  pointer-events:none
+}
+.success-review-top{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:14px
+}
+.success-review-kicker{
+  font-size:.69rem;
+  line-height:1.3;
+  font-weight:700;
+  letter-spacing:.105em;
+  text-transform:uppercase;
+  color:#655d78
+}
+.success-review-stars{
+  display:flex;
+  gap:3px;
+  color:var(--violet)
+}
+.success-review-stars span{
+  display:grid;
+  place-items:center;
+  width:17px;
+  height:17px;
+  opacity:0;
+  transform:translateY(5px) scale(.55) rotate(-8deg);
+  animation:reviewStarPop .38s cubic-bezier(.18,.9,.25,1.25) forwards
+}
+.success-review-stars span:nth-child(1){animation-delay:.42s}
+.success-review-stars span:nth-child(2){animation-delay:.49s}
+.success-review-stars span:nth-child(3){animation-delay:.56s}
+.success-review-stars span:nth-child(4){animation-delay:.63s}
+.success-review-stars span:nth-child(5){animation-delay:.70s}
+.success-review-stars svg{
+  width:17px;
+  height:17px;
+  fill:currentColor;
+  stroke:currentColor;
+  stroke-width:1.15
+}
+.success-review-copy{
+  position:relative;
+  z-index:1;
+  padding-right:16px
+}
+.success-review-copy strong{
+  display:block;
+  color:var(--ink);
+  font-family:var(--font-display);
+  font-size:1.22rem;
+  font-weight:600;
+  letter-spacing:-.025em;
+  line-height:1.25;
+  margin-bottom:7px
+}
+.success-review-copy p{
+  margin:0!important;
+  max-width:440px;
+  color:var(--text-secondary);
+  font-size:.86rem;
+  line-height:1.6
+}
+.success-review-link{
+  position:relative;
+  z-index:1;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  min-width:178px;
+  margin-top:17px;
+  padding:11px 14px 11px 15px;
+  border:1px solid #bfb4f7;
+  border-radius:9px;
+  background:#fff;
+  color:var(--ink);
+  font-size:.83rem;
+  font-weight:650;
+  transition:
+    transform .22s cubic-bezier(.2,.75,.2,1),
+    border-color .2s ease,
+    background-color .2s ease,
+    box-shadow .2s ease,
+    color .2s ease
+}
+.success-review-arrow{
+  width:16px;
+  height:16px;
+  transition:transform .2s cubic-bezier(.2,.75,.2,1)
+}
+.success-review-link:hover{
+  transform:translateY(-2px);
+  border-color:var(--violet);
+  background:var(--violet);
+  color:#fff;
+  box-shadow:0 9px 24px rgb(98 71 232 / .16)
+}
+.success-review-link:hover .success-review-arrow{
+  transform:translate(2px,-2px)
+}
+.success-review-link:active{transform:translateY(0) scale(.985)}
+@keyframes reviewCardIn{
+  from{opacity:0;transform:translateY(12px) scale(.988)}
+  to{opacity:1;transform:none}
+}
+@keyframes reviewStarPop{
+  0%{opacity:0;transform:translateY(5px) scale(.55) rotate(-8deg)}
+  70%{opacity:1;transform:translateY(-1px) scale(1.12) rotate(3deg)}
+  100%{opacity:1;transform:none}
+}
+@media(max-width:620px){
+  .success-review-prompt{padding:19px 18px}
+  .success-review-top{align-items:flex-start;flex-direction:column;gap:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .star-rating label,.star-rating label svg{transition:none!important;transform:none!important}
+  .success-review-prompt,.success-review-stars span{animation:none!important;opacity:1!important;transform:none!important}
+  .success-review-link,.success-review-arrow{transition:none!important}
+}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Nexora","description":"A marketing agency helping brands plan and execute focused campaigns through audience insight, creator partnerships, and clear coordination."}</script>
 
@@ -2346,13 +2485,6 @@ body { font-size: 1.025rem; }
 }
 .contact-tabs-list [role="tab"]:hover{
   background:rgb(99 71 232 / .035);
-}
-.success-review-prompt{
-  transition:transform .22s cubic-bezier(.2,.75,.2,1),border-color .22s ease;
-}
-.success-review-prompt:hover{
-  transform:translateY(-2px);
-  border-color:#c7bef1;
 }
 
 /* Scroll-reveal system. Applied only after JS opts in. */
@@ -2616,8 +2748,20 @@ body { font-size: 1.025rem; }
       <span class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span><p class="small-label">Enquiry received</p><h2>Thanks for<br>getting in touch.</h2>
       <p>We’ll review your enquiry and follow up by email with questions or next steps.</p>
       <div class="success-review-prompt">
-        <p><strong>Thanks for your enquiry.</strong> If you’ve worked with Nexora before, could you take a moment to review us?</p>
-        <a class="action-link action-secondary success-review-link" href="#review-us">Review Nexora <svg viewBox="0 0 24 24" aria-hidden="true" class="success-review-star"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></a>
+        <div class="success-review-top">
+          <span class="success-review-kicker">Worked with Nexora before?</span>
+          <div class="success-review-stars" aria-hidden="true">
+            <span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span>
+          </div>
+        </div>
+        <div class="success-review-copy">
+          <strong>How was your experience?</strong>
+          <p>Your feedback helps us improve Nexora. If we’ve worked together before, a quick review takes less than a minute.</p>
+        </div>
+        <a class="success-review-link" href="#review-us">
+          <span>Leave a review</span>
+          <svg class="success-review-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </a>
       </div>
       <button class="text-link reset-enquiry" type="button">Send another enquiry <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
     </div>
@@ -2682,8 +2826,20 @@ body { font-size: 1.025rem; }
       <span class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span><p class="small-label">Enquiry received</p><h2>Thanks for<br>getting in touch.</h2>
       <p>We’ll review your content and get in touch by email if there’s a relevant opportunity.</p>
       <div class="success-review-prompt">
-        <p><strong>Thanks for your enquiry.</strong> If you’ve worked with Nexora before, could you take a moment to review us?</p>
-        <a class="action-link action-secondary success-review-link" href="#review-us">Review Nexora <svg viewBox="0 0 24 24" aria-hidden="true" class="success-review-star"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></a>
+        <div class="success-review-top">
+          <span class="success-review-kicker">Worked with Nexora before?</span>
+          <div class="success-review-stars" aria-hidden="true">
+            <span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span>
+          </div>
+        </div>
+        <div class="success-review-copy">
+          <strong>How was your experience?</strong>
+          <p>Your feedback helps us improve Nexora. If we’ve worked together before, a quick review takes less than a minute.</p>
+        </div>
+        <a class="success-review-link" href="#review-us">
+          <span>Leave a review</span>
+          <svg class="success-review-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </a>
       </div>
       <button class="text-link reset-enquiry" type="button">Send another enquiry <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
     </div>
@@ -2725,8 +2881,20 @@ body { font-size: 1.025rem; }
       <span class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span><p class="small-label">Enquiry received</p><h2>Thanks for<br>getting in touch.</h2>
       <p>We’ll review your enquiry and follow up by email with questions or next steps.</p>
       <div class="success-review-prompt">
-        <p><strong>Thanks for your enquiry.</strong> If you’ve worked with Nexora before, could you take a moment to review us?</p>
-        <a class="action-link action-secondary success-review-link" href="#review-us">Review Nexora <svg viewBox="0 0 24 24" aria-hidden="true" class="success-review-star"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></a>
+        <div class="success-review-top">
+          <span class="success-review-kicker">Worked with Nexora before?</span>
+          <div class="success-review-stars" aria-hidden="true">
+            <span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span><span><svg viewBox="0 0 24 24"><path d="m12 2.6 2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.01 6.36 19.98l1.08-6.29-4.57-4.45 6.31-.92L12 2.6Z"></path></svg></span>
+          </div>
+        </div>
+        <div class="success-review-copy">
+          <strong>How was your experience?</strong>
+          <p>Your feedback helps us improve Nexora. If we’ve worked together before, a quick review takes less than a minute.</p>
+        </div>
+        <a class="success-review-link" href="#review-us">
+          <span>Leave a review</span>
+          <svg class="success-review-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </a>
       </div>
       <button class="text-link reset-enquiry" type="button">Send another enquiry <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
     </div>
