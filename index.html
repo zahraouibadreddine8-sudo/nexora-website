@@ -2108,7 +2108,14 @@ svg {
 }
 
 [hidden]{display:none!important}#main-content:focus{outline:none}.contact-tabs-list [role="tab"]{position:relative}.contact-tabs-list [role="tab"][aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;height:2px}.form-select{display:block;appearance:auto}.form-select:focus-visible{outline-offset:2px}.form-select:has(option:checked[value=""]){color:#747970}.mobile-menu{position:fixed;inset:0 0 0 auto;margin:0;height:100%;height:100dvh;max-height:100%;color:var(--ink);border:0;overflow:auto;overscroll-behavior:contain}.mobile-menu[open]{display:flex;flex-direction:column}.mobile-menu::backdrop{background:rgb(0 0 0 / .45)}body.navigation-open{overflow:hidden}.site-footer [data-year]{font-variant-numeric:tabular-nums}select{touch-action:manipulation}noscript>p{padding:16px 20px;background:var(--section)}@media print{[data-page][hidden]{display:block!important}.site-header,.site-footer,.final-callout,.menu-trigger{display:none!important}}
-.privacy-confirmation{margin-top:.45rem}.privacy-check{display:flex;align-items:flex-start;gap:.75rem;font-size:.86rem;line-height:1.55;color:var(--muted,#6f6f69);cursor:pointer}.privacy-check input{width:1.05rem;height:1.05rem;margin-top:.16rem;flex:0 0 auto;accent-color:currentColor}.privacy-check a{text-decoration:underline;text-underline-offset:3px}.footer-legal-links{display:inline-flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.footer-legal-links{display:inline-flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.legal-consent{margin-top:1.15rem;padding:20px 22px;border:1px solid #d8d4e8;border-radius:16px;background:linear-gradient(180deg,#faf9ff 0%,#f7f6fb 100%);color:#24231f;box-shadow:0 1px 0 rgb(20 20 20 / .02)}
+.legal-consent-copy{display:grid;gap:6px;margin-bottom:15px}.legal-consent-kicker{display:block;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#6247e8}.legal-consent-summary{margin:0;max-width:72ch;color:#3f3d38;font-size:.9rem;line-height:1.55}
+.legal-check{display:grid;grid-template-columns:22px minmax(0,1fr);gap:11px;align-items:start;margin:0;cursor:pointer;color:#24231f!important;font-size:.9rem!important;line-height:1.55!important;font-weight:500!important}
+.legal-check input{appearance:auto!important;width:19px!important;height:19px!important;margin:2px 0 0!important;opacity:1!important;accent-color:#6247e8;cursor:pointer;flex:none}.legal-check a{color:#5138d9!important;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;font-weight:650}.legal-check a:hover{color:#3822b5!important}
+.legal-consent-note{margin:13px 0 0;padding-top:13px;border-top:1px solid #e3e0ed;color:#68655f;font-size:.78rem;line-height:1.55}.legal-submit-hint{display:block;margin-top:10px;color:#6d6877;font-size:.76rem}.legal-consent:has(input:checked){border-color:#b8afe8;background:#faf9ff}.legal-consent:has(input:checked) .legal-submit-hint{color:#4f7b5c}.legal-consent:has(input:checked) .legal-submit-hint::before{content:"✓ ";font-weight:800}.legal-consent:has(input:checked) .legal-submit-hint{font-size:0}.legal-consent:has(input:checked) .legal-submit-hint::after{content:"Legal acknowledgement confirmed.";font-size:.76rem}
+.legal-consent-error{display:block;margin-top:8px}.submit-button:disabled{opacity:.48!important;cursor:not-allowed!important;transform:none!important;box-shadow:none!important;filter:saturate(.75)}.submit-button:disabled:hover{transform:none!important}
+@media(max-width:720px){.legal-consent{padding:17px}.legal-check{grid-template-columns:20px minmax(0,1fr);font-size:.86rem!important}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Nexora","description":"A creator-partnership agency helping brands find and coordinate creators through focused research and careful qualification."}</script>
 
@@ -2266,7 +2273,7 @@ body { font-size: 1.025rem; }
 <button type="button" role="tab" id="tab-creator" aria-controls="panel-creator" aria-selected="false" tabindex="-1" data-type="creator" data-state="inactive">Creator</button>
 <button type="button" role="tab" id="tab-other" aria-controls="panel-other" aria-selected="false" tabindex="-1" data-type="other" data-state="inactive">Other</button>
     </div><section id="panel-brand" role="tabpanel" aria-labelledby="tab-brand" class="contact-tab-panel" data-state="active">
-    <form class="enquiry-form" data-enquiry="brand" action="https://api.web3forms.com/submit" method="post" novalidate aria-label="Brand campaign enquiry">
+    <form class="enquiry-form" data-enquiry="brand" action="https://api.web3forms.com/submit" method="post" aria-label="Brand campaign enquiry">
       <div class="form-heading"><h2>Tell us about your campaign.</h2><p>A short brief is a good place to start.<span>Fields marked * are required.</span></p></div>
       <fieldset><legend class="sr-only">Your enquiry details</legend><div class="form-grid"><div class="form-field">
     <label for="enquiry-brand-name">Your name<span aria-hidden="true"> *</span></label>
@@ -2289,8 +2296,20 @@ body { font-size: 1.025rem; }
     <textarea id="enquiry-brand-message" name="message" required rows="5" maxlength="5000" placeholder="Your product, campaign goal, target market, preferred platform, and any timing or budget in mind." aria-invalid="false"></textarea>
     <span class="field-error" id="enquiry-brand-message-error" hidden></span>
   </div>
-  <div class="honeypot" aria-hidden="true"><label for="enquiry-brand-botcheck">Leave this field empty</label><input type="text" id="enquiry-brand-botcheck" name="botcheck" tabindex="-1" autocomplete="off"></div></div></fieldset>
-      <div class="form-field full-width privacy-confirmation"><label class="privacy-check"><input id="enquiry-brand-privacy" name="privacy_acknowledgement" type="checkbox" required value="acknowledged"><span>I have read the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> and understand that this enquiry is processed through Web3Forms so Nexora can respond.</span></label><span class="field-error" id="enquiry-brand-privacy-error" hidden></span></div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
+  <div class="honeypot" aria-hidden="true"><label for="enquiry-brand-botcheck">Leave this field empty</label><input type="checkbox" id="enquiry-brand-botcheck" name="botcheck" tabindex="-1" autocomplete="off" style="display:none"></div></div></fieldset>
+      <div class="legal-consent" data-legal-consent>
+        <div class="legal-consent-copy">
+          <span class="legal-consent-kicker">Before you send</span>
+          <p class="legal-consent-summary">This starts a conversation only. It does not create a contract, representation, exclusivity, or payment obligation.</p>
+        </div>
+        <label class="legal-check" for="enquiry-brand-legal">
+          <input id="enquiry-brand-legal" name="legal_acknowledgement" type="checkbox" required value="accepted">
+          <span>I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>, including the international processing described there.</span>
+        </label>
+        <p class="legal-consent-note">By submitting, you confirm the information is yours or you are authorized to provide it. Do not send passwords, payment-card details, government IDs, medical information, trade secrets, or other sensitive/confidential information. If you are not old enough to enter a binding commercial agreement where you live, a parent or legal guardian must participate before any paid campaign is finalized.</p>
+        <span class="field-error legal-consent-error" id="enquiry-brand-legal-error" hidden></span>
+        <span class="legal-submit-hint" aria-hidden="true">Check the box above to enable Send enquiry.</span>
+      </div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit" disabled aria-disabled="true"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
       <p class="sr-only submission-status" role="status" aria-live="polite"></p>
       <div class="form-error" role="alert" tabindex="-1" hidden><strong>We couldn’t confirm your enquiry was received.</strong><p>Your details are still here. Please check your connection and try again.</p></div>
     </form>
@@ -2301,7 +2320,7 @@ body { font-size: 1.025rem; }
     </div>
   </section>
 <section id="panel-creator" role="tabpanel" aria-labelledby="tab-creator" class="contact-tab-panel" data-state="inactive" hidden>
-    <form class="enquiry-form" data-enquiry="creator" action="https://api.web3forms.com/submit" method="post" novalidate aria-label="Creator enquiry">
+    <form class="enquiry-form" data-enquiry="creator" action="https://api.web3forms.com/submit" method="post" aria-label="Creator enquiry">
       <div class="form-heading"><h2>Introduce your content.</h2><p>A link to your channel and a little context are enough.<span>Fields marked * are required.</span></p></div>
       <fieldset><legend class="sr-only">Your enquiry details</legend><div class="form-grid"><div class="form-field">
     <label for="enquiry-creator-name">Your name<span aria-hidden="true"> *</span></label>
@@ -2339,8 +2358,20 @@ body { font-size: 1.025rem; }
     <textarea id="enquiry-creator-message" name="message" rows="5" maxlength="5000" placeholder="Audience geography, recent performance, rates, or the types of partnerships you’re interested in." aria-invalid="false"></textarea>
     <span class="field-error" id="enquiry-creator-message-error" hidden></span>
   </div>
-  <div class="honeypot" aria-hidden="true"><label for="enquiry-creator-botcheck">Leave this field empty</label><input type="text" id="enquiry-creator-botcheck" name="botcheck" tabindex="-1" autocomplete="off"></div></div></fieldset>
-      <div class="form-field full-width privacy-confirmation"><label class="privacy-check"><input id="enquiry-creator-privacy" name="privacy_acknowledgement" type="checkbox" required value="acknowledged"><span>I have read the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> and understand that this enquiry is processed through Web3Forms so Nexora can respond.</span></label><span class="field-error" id="enquiry-creator-privacy-error" hidden></span></div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
+  <div class="honeypot" aria-hidden="true"><label for="enquiry-creator-botcheck">Leave this field empty</label><input type="checkbox" id="enquiry-creator-botcheck" name="botcheck" tabindex="-1" autocomplete="off" style="display:none"></div></div></fieldset>
+      <div class="legal-consent" data-legal-consent>
+        <div class="legal-consent-copy">
+          <span class="legal-consent-kicker">Before you send</span>
+          <p class="legal-consent-summary">This starts a conversation only. It does not create a contract, representation, exclusivity, or payment obligation.</p>
+        </div>
+        <label class="legal-check" for="enquiry-creator-legal">
+          <input id="enquiry-creator-legal" name="legal_acknowledgement" type="checkbox" required value="accepted">
+          <span>I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>, including the international processing described there.</span>
+        </label>
+        <p class="legal-consent-note">By submitting, you confirm the information is yours or you are authorized to provide it. Do not send passwords, payment-card details, government IDs, medical information, trade secrets, or other sensitive/confidential information. If you are not old enough to enter a binding commercial agreement where you live, a parent or legal guardian must participate before any paid campaign is finalized.</p>
+        <span class="field-error legal-consent-error" id="enquiry-creator-legal-error" hidden></span>
+        <span class="legal-submit-hint" aria-hidden="true">Check the box above to enable Send enquiry.</span>
+      </div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit" disabled aria-disabled="true"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
       <p class="sr-only submission-status" role="status" aria-live="polite"></p>
       <div class="form-error" role="alert" tabindex="-1" hidden><strong>We couldn’t confirm your enquiry was received.</strong><p>Your details are still here. Please check your connection and try again.</p></div>
     </form>
@@ -2351,7 +2382,7 @@ body { font-size: 1.025rem; }
     </div>
   </section>
 <section id="panel-other" role="tabpanel" aria-labelledby="tab-other" class="contact-tab-panel" data-state="inactive" hidden>
-    <form class="enquiry-form" data-enquiry="other" action="https://api.web3forms.com/submit" method="post" novalidate aria-label="General enquiry">
+    <form class="enquiry-form" data-enquiry="other" action="https://api.web3forms.com/submit" method="post" aria-label="General enquiry">
       <div class="form-heading"><h2>What’s on your mind?</h2><p>Ask a question about Nexora or working together.<span>Fields marked * are required.</span></p></div>
       <fieldset><legend class="sr-only">Your enquiry details</legend><div class="form-grid"><div class="form-field">
     <label for="enquiry-other-name">Your name<span aria-hidden="true"> *</span></label>
@@ -2366,8 +2397,20 @@ body { font-size: 1.025rem; }
     <textarea id="enquiry-other-message" name="message" required rows="5" maxlength="5000" placeholder="How can we help?" aria-invalid="false"></textarea>
     <span class="field-error" id="enquiry-other-message-error" hidden></span>
   </div>
-  <div class="honeypot" aria-hidden="true"><label for="enquiry-other-botcheck">Leave this field empty</label><input type="text" id="enquiry-other-botcheck" name="botcheck" tabindex="-1" autocomplete="off"></div></div></fieldset>
-      <div class="form-field full-width privacy-confirmation"><label class="privacy-check"><input id="enquiry-other-privacy" name="privacy_acknowledgement" type="checkbox" required value="acknowledged"><span>I have read the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> and understand that this enquiry is processed through Web3Forms so Nexora can respond.</span></label><span class="field-error" id="enquiry-other-privacy-error" hidden></span></div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
+  <div class="honeypot" aria-hidden="true"><label for="enquiry-other-botcheck">Leave this field empty</label><input type="checkbox" id="enquiry-other-botcheck" name="botcheck" tabindex="-1" autocomplete="off" style="display:none"></div></div></fieldset>
+      <div class="legal-consent" data-legal-consent>
+        <div class="legal-consent-copy">
+          <span class="legal-consent-kicker">Before you send</span>
+          <p class="legal-consent-summary">This starts a conversation only. It does not create a contract, representation, exclusivity, or payment obligation.</p>
+        </div>
+        <label class="legal-check" for="enquiry-other-legal">
+          <input id="enquiry-other-legal" name="legal_acknowledgement" type="checkbox" required value="accepted">
+          <span>I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>, including the international processing described there.</span>
+        </label>
+        <p class="legal-consent-note">By submitting, you confirm the information is yours or you are authorized to provide it. Do not send passwords, payment-card details, government IDs, medical information, trade secrets, or other sensitive/confidential information. If you are not old enough to enter a binding commercial agreement where you live, a parent or legal guardian must participate before any paid campaign is finalized.</p>
+        <span class="field-error legal-consent-error" id="enquiry-other-legal-error" hidden></span>
+        <span class="legal-submit-hint" aria-hidden="true">Check the box above to enable Send enquiry.</span>
+      </div><div class="form-actions"><button class="action-link action-primary submit-button" type="submit" disabled aria-disabled="true"><span>Send enquiry</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button><p>We’ll use your details to respond to this enquiry.<br><a href="/privacy/">Privacy &amp; your enquiry</a></p></div>
       <p class="sr-only submission-status" role="status" aria-live="polite"></p>
       <div class="form-error" role="alert" tabindex="-1" hidden><strong>We couldn’t confirm your enquiry was received.</strong><p>Your details are still here. Please check your connection and try again.</p></div>
     </form>
@@ -2383,6 +2426,7 @@ body { font-size: 1.025rem; }
   "use strict";
   const contactEndpoint = "https://api.web3forms.com/submit";
   const contactAccessKey = "32b2e5f2-5b4f-456c-be87-1b58b6057fdc";
+  const legalVersion = "2026-09-19";
   const arrowIcon = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-arrow-up-right\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"></path><path d=\"M7 17 17 7\"></path></svg>";
   const loadingIcon = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-loader-circle loading-icon\" aria-hidden=\"true\"><path d=\"M21 12a9 9 0 1 1-6.219-8.56\"></path></svg>";
   const pages = Array.from(document.querySelectorAll("[data-page]"));
@@ -2525,8 +2569,16 @@ body { font-size: 1.025rem; }
     const status = form.querySelector(".submission-status");
     const button = form.querySelector(".submit-button");
     const fieldset = form.querySelector("fieldset");
+    const legalCheckbox = form.querySelector('input[name="legal_acknowledgement"]');
     const controls = Array.from(form.querySelectorAll("input,textarea,select")).filter(control => control.name !== "botcheck");
     let sending = false;
+    const syncSubmitState = () => {
+      const legalReady = !legalCheckbox || legalCheckbox.checked;
+      button.disabled = sending || !legalReady;
+      button.setAttribute("aria-disabled", String(button.disabled));
+    };
+    if (legalCheckbox) legalCheckbox.addEventListener("change", syncSubmitState);
+    syncSubmitState();
     controls.forEach(control => {
       control.addEventListener("input", () => setError(control, ""));
       control.addEventListener("change", () => setError(control, ""));
@@ -2538,7 +2590,7 @@ body { font-size: 1.025rem; }
       for (const control of controls) {
         if (control.type !== "checkbox") control.value = control.value.trim();
         let message = "";
-        if (control.required && ((control.type === "checkbox" && !control.checked) || (control.type !== "checkbox" && !control.value))) message = control.name === "privacy_acknowledgement" ? "Please confirm that you have read the Privacy Policy." : control.name === "platform" ? "Please choose your main platform." : "Please complete this field.";
+        if (control.required && ((control.type === "checkbox" && !control.checked) || (control.type !== "checkbox" && !control.value))) message = control.name === "legal_acknowledgement" ? "Please accept the Terms of Use and acknowledge the Privacy Policy before sending." : control.name === "platform" ? "Please choose your main platform." : "Please complete this field.";
         else if (control.validity.typeMismatch) message = control.type === "email" ? "Please enter a valid email address." : "Please use a complete link starting with https://.";
         else if (control.type === "url" && control.value && !/^https?:\/\//i.test(control.value)) message = "Please use a complete http:// or https:// link.";
         else if (!control.validity.valid) message = "Please check this field.";
@@ -2569,13 +2621,17 @@ body { font-size: 1.025rem; }
             type,
             replyto: values.email,
             platform: values.platform || "Not specified",
-            submittedAt: new Date().toISOString()
+            submittedAt: new Date().toISOString(),
+            legalAcknowledgedAt: new Date().toISOString(),
+            termsVersion: legalVersion,
+            privacyPolicyVersion: legalVersion
           }),
           signal: controller.signal
         });
         const result = await response.json();
         if (!response.ok || !result || typeof result !== "object" || result.success !== true) throw new Error("Submission unavailable");
         form.reset();
+        syncSubmitState();
         form.hidden = true;
         success.hidden = false;
         status.textContent = "";
@@ -2588,7 +2644,7 @@ body { font-size: 1.025rem; }
         window.clearTimeout(timeout);
         sending = false;
         fieldset.disabled = false;
-        button.disabled = false;
+        syncSubmitState();
         form.removeAttribute("aria-busy");
         button.innerHTML = `<span>Send enquiry</span>${arrowIcon}`;
       }
@@ -2598,6 +2654,7 @@ body { font-size: 1.025rem; }
       form.hidden = false;
       feedback.hidden = true;
       controls.forEach(control => setError(control, ""));
+      syncSubmitState();
       controls[0].focus();
     });
   });
