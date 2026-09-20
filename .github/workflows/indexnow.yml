@@ -1,0 +1,29 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for production deployment
+        run: sleep 90
+
+      - name: Notify IndexNow
+        run: |
+          curl --fail-with-body -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{
+              "host": "nexora-website-gamma.vercel.app",
+              "key": "864093eff077474c9889ee59ae2a7b68",
+              "keyLocation": "https://nexora-website-gamma.vercel.app/864093eff077474c9889ee59ae2a7b68.txt",
+              "urlList": [
+                "https://nexora-website-gamma.vercel.app/",
+                "https://nexora-website-gamma.vercel.app/legal/",
+                "https://nexora-website-gamma.vercel.app/privacy/",
+                "https://nexora-website-gamma.vercel.app/terms/"
+              ]
+            }'
