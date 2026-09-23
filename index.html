@@ -2100,6 +2100,20 @@ svg {
 .review-note p{max-width:720px}
 @media(max-width:959px){.review-layout{padding-block:52px 70px}}
 
+.review-relationship-field{align-items:flex-start}
+.relationship-label{display:block;font-size:.8125rem;font-weight:500;margin-bottom:9px;color:var(--ink)}
+.review-relationship-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
+.review-relationship-options input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.review-relationship-options label{display:flex;align-items:center;gap:9px;min-height:46px;margin:0!important;padding:10px 12px;border:1px solid #d3d0dc;border-radius:12px;background:#fff;color:#5f5b68;font-size:.8rem;font-weight:600;line-height:1.2;cursor:pointer;box-shadow:0 0 0 rgb(91 62 234 / 0);transform:translateY(0);transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease,transform .18s cubic-bezier(.2,.75,.2,1)}
+.review-relationship-options label svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s cubic-bezier(.2,.75,.2,1)}
+.review-relationship-options label:hover{border-color:#a99cf3;background:#faf9ff;color:#5b3eea;box-shadow:0 7px 20px rgb(91 62 234 / .08);transform:translateY(-1px)}
+.review-relationship-options label:hover svg{transform:scale(1.08)}
+.review-relationship-options input:checked+label{border-color:#6b4cf6;background:linear-gradient(145deg,#fbfaff,#f5f2ff);color:#5b3eea;box-shadow:0 8px 22px rgb(91 62 234 / .12);transform:translateY(-1px)}
+.review-relationship-options input:checked+label svg{transform:scale(1.08)}
+.review-relationship-options input:focus-visible+label{outline:2px solid #6b4cf6;outline-offset:3px}
+.review-relationship-options[aria-invalid="true"] label{border-color:#d59a95}
+@media(max-width:420px){.review-relationship-options{grid-template-columns:1fr}}
+
 .review-rating-field{align-items:flex-start}
 .rating-label{display:block;font-size:.8125rem;font-weight:650;margin-bottom:10px;color:var(--ink)}
 .star-rating{display:inline-flex;flex-direction:row-reverse;justify-content:flex-end;gap:7px;padding:4px 0 2px}
@@ -2709,15 +2723,30 @@ body { font-size: 1.025rem; }
               <input id="review-email" name="email" type="email" required autocomplete="email" maxlength="250">
               <span class="field-error" id="review-email-error" hidden></span>
             </div>
-            <div class="form-field">
-              <label for="review-relationship">You worked with Nexora as<span aria-hidden="true"> *</span></label>
-              <select id="review-relationship" name="relationship" required>
-                <option value="">Select one</option>
-                <option>Brand</option>
-                <option>Creator</option>
-                <option>Agency / partner</option>
-                <option>Other</option>
-              </select>
+            <div class="form-field review-relationship-field">
+              <span class="relationship-label" id="review-relationship-label">You worked with Nexora as<span aria-hidden="true"> *</span></span>
+              <div class="review-relationship-options" role="radiogroup" aria-labelledby="review-relationship-label" aria-describedby="review-relationship-error">
+                <input id="review-relationship-brand" name="relationship" type="radio" value="Brand" required data-error-id="review-relationship-error">
+                <label for="review-relationship-brand">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M6 21V5h8v16M14 9h4v12M9 8h2M9 12h2M9 16h2M17 12h1M17 16h1"></path></svg>
+                  <span>Brand</span>
+                </label>
+                <input id="review-relationship-creator" name="relationship" type="radio" value="Creator" required data-error-id="review-relationship-error">
+                <label for="review-relationship-creator">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-4 2.4-6 5.5-6s5 2 5.5 6M16 7.5a2.5 2.5 0 0 1 0 5M16 14c2.6.2 4.1 2.2 4.5 5"></path></svg>
+                  <span>Creator</span>
+                </label>
+                <input id="review-relationship-partner" name="relationship" type="radio" value="Agency / partner" required data-error-id="review-relationship-error">
+                <label for="review-relationship-partner">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 12 2.1 2.1a2 2 0 0 0 2.8 0L16 11M3 9l4-4 4 3-5 5-3-4ZM21 9l-4-4-3 2.3M6 13l4.8 4.8a2 2 0 0 0 2.8 0L18 13l3-4"></path></svg>
+                  <span>Agency / partner</span>
+                </label>
+                <input id="review-relationship-other" name="relationship" type="radio" value="Other" required data-error-id="review-relationship-error">
+                <label for="review-relationship-other">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle></svg>
+                  <span>Other</span>
+                </label>
+              </div>
               <span class="field-error" id="review-relationship-error" hidden></span>
             </div>
             <div class="form-field">
@@ -3201,9 +3230,15 @@ body { font-size: 1.025rem; }
   });
 
   function setError(control, message) {
-    const error = document.getElementById(`${control.id}-error`);
+    const errorId = control.dataset.errorId || `${control.id}-error`;
+    const error = document.getElementById(errorId);
     if (!error) return;
     control.setAttribute("aria-invalid", String(Boolean(message)));
+    const radioGroup = control.type === "radio" ? control.closest('[role="radiogroup"]') : null;
+    if (radioGroup) {
+      radioGroup.setAttribute("aria-invalid", String(Boolean(message)));
+      radioGroup.querySelectorAll('input[type="radio"]').forEach(input => input.setAttribute("aria-invalid", String(Boolean(message))));
+    }
     error.textContent = message;
     error.hidden = !message;
     if (message) control.setAttribute("aria-describedby", error.id);
@@ -3353,14 +3388,19 @@ body { font-size: 1.025rem; }
       let firstInvalid = null;
 
       for (const control of reviewControls) {
-        if (control.type !== "checkbox") control.value = control.value.trim();
+        if (!["checkbox", "radio"].includes(control.type)) control.value = control.value.trim();
         let message = "";
-        if (control.required && ((control.type === "checkbox" && !control.checked) || (control.type !== "checkbox" && !control.value))) {
-          message = control.name === "legal_acknowledgement" ? "Please confirm the review statement and acknowledge the legal terms before sending." : "Please complete this field.";
+        const radioMissing = control.type === "radio" && control.required && !reviewForm.querySelector(`input[name="${control.name}"]:checked`);
+        if (control.required && ((control.type === "checkbox" && !control.checked) || radioMissing || (!["checkbox", "radio"].includes(control.type) && !control.value))) {
+          message = control.name === "legal_acknowledgement"
+            ? "Please confirm the review statement and acknowledge the legal terms before sending."
+            : control.name === "relationship"
+              ? "Please choose how you worked with Nexora."
+              : "Please complete this field.";
         } else if (control.validity.typeMismatch) {
           message = control.type === "email" ? "Please enter a valid email address." : "Please check this field.";
         } else if (!control.validity.valid) {
-          message = "Please check this field.";
+          message = control.name === "relationship" ? "Please choose how you worked with Nexora." : "Please check this field.";
         }
         setError(control, message);
         if (message && !firstInvalid) firstInvalid = control;
