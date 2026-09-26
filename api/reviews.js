@@ -67,11 +67,11 @@ function validateSubmission(body) {
     return { bot: true };
   }
 
-  const name = cleanText(body.name, 250);
+  const name = cleanText(body.name, 120);
   const email = cleanEmail(body.email);
   const relationship = cleanText(body.relationship, 80);
-  const company_or_channel = cleanText(body.company_or_channel, 250);
-  const review = cleanText(body.review, 5000);
+  const company_or_channel = cleanText(body.company_or_channel, 180);
+  const review = cleanText(body.review, 3000);
   const rating = Number(body.rating);
   const legal_acknowledgement = body.legal_acknowledgement === "accepted" ? "accepted" : "";
 
@@ -79,7 +79,7 @@ function validateSubmission(body) {
   if (!email) return { error: "Please provide a valid email address." };
   if (!ALLOWED_RELATIONSHIPS.has(relationship)) return { error: "Please choose how you worked with Nexora." };
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) return { error: "Please choose a rating from 1 to 5." };
-  if (!review) return { error: "Please write your review." };
+  if (review.length < 3) return { error: "Please write at least 3 characters in your review." };
   if (!legal_acknowledgement) return { error: "Please confirm the review statement and legal terms." };
 
   return {
@@ -99,10 +99,10 @@ function publicReview(item) {
   if (!item || typeof item !== "object") return null;
 
   const rating = Number(item.rating);
-  const name = cleanText(item.name, 250);
+  const name = cleanText(item.name, 120);
   const relationship = cleanText(item.relationship, 80);
-  const company_or_channel = cleanText(item.company_or_channel, 250);
-  const review = cleanText(item.review, 5000);
+  const company_or_channel = cleanText(item.company_or_channel, 180);
+  const review = cleanText(item.review, 3000);
   const created_at = cleanText(item.created_at, 64);
   const rawId = item.id;
 

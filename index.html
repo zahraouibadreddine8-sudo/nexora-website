@@ -178,7 +178,7 @@
           <div class="form-grid">
             <div class="form-field">
               <label for="review-name">Your name<span aria-hidden="true"> *</span></label>
-              <input id="review-name" name="name" type="text" required autocomplete="name" maxlength="250">
+              <input id="review-name" name="name" type="text" required autocomplete="name" maxlength="120">
               <span class="field-error" id="review-name-error" hidden></span>
             </div>
             <div class="form-field">
@@ -214,7 +214,7 @@
             </div>
             <div class="form-field">
               <label for="review-company">Company / channel<span class="optional">Optional</span></label>
-              <input id="review-company" name="company_or_channel" type="text" maxlength="250">
+              <input id="review-company" name="company_or_channel" type="text" maxlength="180">
               <span class="field-error" id="review-company-error" hidden></span>
             </div>
             <div class="form-field full-width review-rating-field">
@@ -231,7 +231,7 @@
             </div>
             <div class="form-field full-width">
               <label for="review-message">Your review<span aria-hidden="true"> *</span></label>
-              <textarea id="review-message" name="review" required rows="6" maxlength="5000" placeholder="What did Nexora do well? What could we improve? What was your experience working with us?"></textarea>
+              <textarea id="review-message" name="review" required rows="6" minlength="3" maxlength="3000" placeholder="What did Nexora do well? What could we improve? What was your experience working with us?"></textarea>
               <span class="field-error" id="review-message-error" hidden></span>
             </div>
             <div class="honeypot" aria-hidden="true">
