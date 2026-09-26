@@ -2138,38 +2138,6 @@ svg {
   .review-empty-mark{width:46px;height:46px}
   .review-empty-link{grid-column:1}
 }
-.reviews-section-heading>div{display:grid;gap:5px}
-.review-manage-link{border:0;background:transparent;font:inherit;cursor:pointer;align-self:end}
-.reviews-list{display:grid}
-.review-card{display:grid;grid-template-columns:160px minmax(0,1fr) auto;gap:28px;padding:30px 0;border-bottom:1px solid var(--line)}
-.review-card-stars{display:flex;gap:3px;color:#6247e8;font-size:1.02rem;letter-spacing:.02em}
-.review-card-meta{display:grid;gap:7px;align-content:start}
-.review-card-name{font-size:1rem;font-weight:700;color:var(--ink)}
-.review-card-context{font-size:.77rem;color:#6b6672}
-.review-card-copy{margin:0;max-width:760px;font-size:1rem;line-height:1.7;color:#2c2a31;white-space:pre-wrap;overflow-wrap:anywhere}
-.review-card-date{display:block;margin-top:12px;font-size:.72rem;color:#8a8590}
-.review-delete{align-self:start;border:1px solid #ddd8e8;background:#fff;padding:8px 13px;font-size:.76rem;font-weight:650;cursor:pointer;color:#8a2931}
-.review-delete:hover{border-color:#c87880;background:#fff8f8}
-.reviews-load-error{padding:28px 0;color:#8a2931}
-.review-admin-dialog{width:min(520px,calc(100vw - 28px));padding:0;border:0;border-radius:22px;background:transparent}
-.review-admin-dialog::backdrop{background:rgb(20 18 28 / .58);backdrop-filter:blur(7px)}
-.review-admin-shell{position:relative;border-radius:22px;background:#fff;box-shadow:0 32px 90px rgb(20 18 28 / .28);overflow:hidden}
-.review-admin-content{padding:38px}
-.review-admin-content h2{margin:8px 0 12px;font-size:2rem}
-.review-admin-content>p{color:#625d6b;line-height:1.6}
-.review-admin-content form{display:grid;gap:12px;margin-top:22px}
-.review-admin-content label{font-size:.8rem;font-weight:650}
-.review-admin-content input{width:100%;padding:13px 15px;border:1px solid #d8d4e8;border-radius:14px;background:#fff;outline:none}
-.review-admin-content input:focus{border-color:#6247e8;box-shadow:0 0 0 3px rgb(98 71 232 / .1)}
-.review-admin-content form .action-link{justify-self:start}
-.review-admin-status{min-height:1.4em;margin-top:14px!important;font-size:.8rem}
-@media(max-width:720px){
-  .review-card{grid-template-columns:1fr;gap:12px}
-  .review-delete{justify-self:start}
-  .reviews-section-heading{align-items:flex-end}
-  .review-admin-content{padding:30px 20px}
-}
-
 
 
 .review-relationship-field{align-items:flex-start}
@@ -2781,32 +2749,27 @@ body { font-size: 1.025rem; }
           Leave a review
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </button>
-        <p>Reviews appear publicly after submission. Nexora can remove spam or inappropriate content.</p>
+        <p>Every review is checked by Nexora before it appears publicly.</p>
       </div>
     </div>
 
     <div class="reviews-public" aria-labelledby="published-reviews-title">
       <div class="reviews-section-heading">
-        <div>
-          <span class="small-label">Published feedback</span>
-          <h2 id="published-reviews-title">Reviews</h2>
-        </div>
-        <button class="text-link review-manage-link" type="button" data-review-manage>Manage reviews</button>
+        <span class="small-label">Published feedback</span>
+        <h2 id="published-reviews-title">Reviews</h2>
       </div>
-      <div class="reviews-list" data-reviews-list aria-live="polite"></div>
-      <article class="review-empty-state" data-review-empty hidden>
+      <article class="review-empty-state">
         <div class="review-empty-mark" aria-hidden="true">★</div>
         <div>
-          <p class="small-label">No reviews yet</p>
-          <h3>Be the first to leave one.</h3>
-          <p>New reviews appear here automatically after they are submitted.</p>
+          <p class="small-label">No published reviews yet</p>
+          <h3>There’s nothing public here yet.</h3>
+          <p>When a verified reviewer gives Nexora permission to quote their feedback publicly, it will appear here.</p>
         </div>
         <button class="text-link review-empty-link" type="button" data-open-review-dialog>
           Leave the first review
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </button>
       </article>
-      <p class="reviews-load-error" data-reviews-error hidden>Reviews could not be loaded right now. Please refresh and try again.</p>
     </div>
   </section>
 
@@ -2897,11 +2860,15 @@ body { font-size: 1.025rem; }
         <div class="legal-consent" data-legal-consent>
           <div class="legal-consent-copy">
             <span class="legal-consent-kicker">Before you send</span>
-            <p class="legal-consent-summary">Reviews must reflect a genuine experience. Reviews are published publicly after submission.</p>
+            <p class="legal-consent-summary">Reviews must reflect a genuine experience. Submission does not guarantee that a review will be published.</p>
           </div>
           <label class="legal-check" for="review-legal">
             <input id="review-legal" name="legal_acknowledgement" type="checkbox" required value="accepted">
-            <span>I confirm this review reflects my genuine experience and I understand that my name, relationship, company/channel (if provided), star rating, and review will be published publicly. My email stays private. I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+            <span>I confirm this review reflects my genuine experience, I am authorized to provide the information, and I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+          </label>
+          <label class="legal-check review-publish-check" for="review-publish">
+            <input id="review-publish" name="public_quote_permission" type="checkbox" value="yes">
+            <span>Optional: Nexora may quote this review publicly with my name and company/channel. Nexora may shorten it for length without changing its meaning.</span>
           </label>
           <p class="legal-consent-note">Do not include confidential campaign terms, passwords, payment-card details, government IDs, health information, private analytics screenshots, or another person’s private information.</p>
           <span class="field-error legal-consent-error" id="review-legal-error" hidden></span>
@@ -2910,7 +2877,7 @@ body { font-size: 1.025rem; }
 
         <div class="form-actions">
           <button class="action-link action-primary submit-button review-submit-button" type="submit" disabled aria-disabled="true"><span>Send review</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
-          <p>Your review will appear publicly after you send it. Your email remains private.<br><a href="/privacy/">How review data is handled</a></p>
+          <p>Your feedback is sent privately to Nexora first.<br><a href="/privacy/">How review data is handled</a></p>
         </div>
         <p class="sr-only submission-status" role="status" aria-live="polite"></p>
         <div class="form-error" role="alert" tabindex="-1" hidden>
@@ -2923,31 +2890,11 @@ body { font-size: 1.025rem; }
         <span class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span>
         <p class="small-label">Review received</p>
         <h2>Thanks for the<br>feedback.</h2>
-        <p>Your review is now published on the Nexora Reviews page.</p>
+        <p>We’ll keep it private unless you gave permission for Nexora to quote it publicly.</p>
         <button class="text-link reset-review" type="button">Send another review <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
       </div>
     </div>
 
-    </div>
-  </dialog>
-
-  <dialog class="review-admin-dialog" id="review-admin-dialog" aria-labelledby="review-admin-title">
-    <div class="review-admin-shell">
-      <button class="review-dialog-close" type="button" data-close-review-admin aria-label="Close review management">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-      </button>
-      <div class="review-admin-content">
-        <p class="eyebrow"><span aria-hidden="true"></span>Owner access</p>
-        <h2 id="review-admin-title">Manage reviews</h2>
-        <p data-review-admin-copy>Sign in with your owner email. We’ll send you a secure sign-in link.</p>
-        <form data-review-admin-form>
-          <label for="review-admin-email">Email</label>
-          <input id="review-admin-email" type="email" autocomplete="email" required placeholder="you@example.com">
-          <button class="action-link action-primary" type="submit">Send sign-in link</button>
-        </form>
-        <p class="review-admin-status" data-review-admin-status aria-live="polite"></p>
-        <button class="text-link" type="button" data-review-admin-signout hidden>Sign out</button>
-      </div>
     </div>
   </dialog>
 </div>
@@ -3155,18 +3102,11 @@ body { font-size: 1.025rem; }
   </section></div>
     <p class="contact-mobile-next">We review your enquiry and follow up by email with questions or next steps.</p></div></section><section class="privacy-note container" id="privacy"><h2>Privacy &amp; your enquiry</h2><p>The details you submit are sent to Nexora through Web3Forms so we can review and respond to your enquiry. Share business contact details and campaign or channel information only. Please leave out sensitive personal information.</p><p>This site does not use advertising cookies. We use Vercel Analytics for website usage measurement. To ask about your enquiry or request deletion of information you sent, choose “Other” in the form above. <a href="https://web3forms.com/privacy" target="_blank" rel="noreferrer">Web3Forms privacy policy<span class="sr-only"> (opens in a new tab)</span></a>.</p></section></div></main><footer class="site-footer"><div class="container"><div class="footer-top"><div><a href="#home" class="wordmark" aria-label="Nexora home"><img src="data:image/webp;base64,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" alt="Nexora"></a><p>Marketing partnerships, considered.</p></div><nav aria-label="Footer navigation"><a href="#for-brands">For brands</a><a href="#for-creators">For creators</a><a href="#how-it-works">How it works</a><a href="#about">About</a><a href="#faq">FAQ</a><a href="#review-us">Reviews</a><a href="#contact">Contact <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></nav></div><div class="footer-bottom"><span>© <span data-year>2026</span> Nexora</span><span class="footer-legal-links"><a href="/legal/">Legal Notice</a><span aria-hidden="true"> · </span><a href="/privacy/">Privacy</a><span aria-hidden="true"> · </span><a href="/terms/">Terms</a></span><span>Less noise. Better matches.</span></div></div></footer>
 <script id="asset-licenses" type="application/json">{"fonts":{"copyright":"inter-400.woff\n\nCopyright 2016 The Inter Project Authors (https://github.com/rsms/inter)\n\nspace-grotesk-500.woff\n\nCopyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)\n","license":"SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide development of collaborative font projects, to support the font creation efforts of academic and linguistic communities, and to provide a free and open framework in which fonts may be shared and improved in partnership with others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and redistributed freely as long as they are not sold by themselves. The fonts, including any derivative works, can be bundled, embedded, redistributed and/or sold with any software provided that any reserved names are not used by derivative works. The fonts and derivatives, however, cannot be released under any other type of license. The requirement for fonts to remain under this license does not apply to any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright Holder(s) under this license and clearly marked as such. This may include source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the copyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as distributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting, or substituting -- in part or in whole -- any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical writer or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to use, study, copy, merge, embed, modify, redistribute, and sell modified and unmodified copies of the Font Software, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components, in Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled, redistributed and/or sold with any software, provided that each copy contains the above copyright notice and this license. These can be included either as stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font Name(s) unless explicit written permission is granted by the corresponding Copyright Holder. This restriction only applies to the primary font name as presented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font Software shall not be used to promote, endorse or advertise any Modified Version, except to acknowledge the contribution(s) of the Copyright Holder(s) and the Author(s) or with their explicit written permission.\n\n5) The Font Software, modified or unmodified, in part or in whole, must be distributed entirely under this license, and must not be distributed under any other license. The requirement for fonts to remain under this license does not apply to any document created using the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are not met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, CONSEQUENTIAL, OR OTHER DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.\n"},"icons":"ISC License\n\nCopyright (c) 2026 Lucide Icons and Contributors\n\nPermission to use, copy, modify, and/or distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n\n---\n\nThe following Lucide icons are derived from the Feather project:\n\nairplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out\n\nThe MIT License (MIT) (for the icons listed above)\n\nCopyright (c) 2013-present Cole Bemis\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n","images":"Studio lights: Tyler Hendy / Pexels\nhttps://www.pexels.com/photo/two-studio-lights-on-an-empty-studio-53265/\nhttps://www.pexels.com/license/\n\nDaylight studio: Neon Wang / Unsplash\nhttps://unsplash.com/photos/a-room-with-a-lot-of-lights-and-a-camera-ouVZkc5VdAc\nhttps://unsplash.com/license\n"}</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>(() => {
   "use strict";
   const contactEndpoint = "https://api.web3forms.com/submit";
   const contactAccessKey = "32b2e5f2-5b4f-456c-be87-1b58b6057fdc";
   const legalVersion = "2026-09-19";
-  const reviewDbUrl = "https://suqjmswiszeixnpmtbiy.supabase.co";
-  const reviewDbKey = "sb_publishable_pW7ezxi6xS0rsBm1s6z1VQ_6KUyo0nE";
-  const reviewSubmitEndpoint = reviewDbUrl + "/functions/v1/submit-review";
-  const reviewDb = window.supabase.createClient(reviewDbUrl, reviewDbKey, {
-    auth: { flowType: "pkce", detectSessionInUrl: true, persistSession: true }
-  });
   const attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
 
   function cleanAttributionValue(value, maxLength = 180) {
@@ -3498,162 +3438,6 @@ body { font-size: 1.025rem; }
     });
   }
 
-  const reviewsList = document.querySelector("[data-reviews-list]");
-  const reviewsEmpty = document.querySelector("[data-review-empty]");
-  const reviewsError = document.querySelector("[data-reviews-error]");
-  const reviewManageButton = document.querySelector("[data-review-manage]");
-  const reviewAdminDialog = document.getElementById("review-admin-dialog");
-  const reviewAdminForm = document.querySelector("[data-review-admin-form]");
-  const reviewAdminEmail = document.getElementById("review-admin-email");
-  const reviewAdminStatus = document.querySelector("[data-review-admin-status]");
-  const reviewAdminCopy = document.querySelector("[data-review-admin-copy]");
-  const reviewAdminSignout = document.querySelector("[data-review-admin-signout]");
-  let reviewOwnerMode = false;
-
-  function reviewStars(rating) {
-    return "★".repeat(Math.max(1, Math.min(5, Number(rating) || 1))) + "☆".repeat(Math.max(0, 5 - (Number(rating) || 1)));
-  }
-
-  function formatReviewDate(value) {
-    try {
-      return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "numeric" }).format(new Date(value));
-    } catch {
-      return "";
-    }
-  }
-
-  function makeReviewCard(item) {
-    const article = document.createElement("article");
-    article.className = "review-card";
-    article.dataset.reviewId = item.id;
-
-    const meta = document.createElement("div");
-    meta.className = "review-card-meta";
-    const stars = document.createElement("div");
-    stars.className = "review-card-stars";
-    stars.setAttribute("aria-label", String(item.rating) + " out of 5 stars");
-    stars.textContent = reviewStars(item.rating);
-    const name = document.createElement("div");
-    name.className = "review-card-name";
-    name.textContent = item.name;
-    const context = document.createElement("div");
-    context.className = "review-card-context";
-    context.textContent = [item.relationship, item.company_or_channel].filter(Boolean).join(" · ");
-    meta.append(stars, name, context);
-
-    const body = document.createElement("div");
-    const copy = document.createElement("p");
-    copy.className = "review-card-copy";
-    copy.textContent = item.review;
-    const date = document.createElement("time");
-    date.className = "review-card-date";
-    date.dateTime = item.created_at || "";
-    date.textContent = formatReviewDate(item.created_at);
-    body.append(copy, date);
-
-    article.append(meta, body);
-
-    if (reviewOwnerMode) {
-      const del = document.createElement("button");
-      del.type = "button";
-      del.className = "review-delete";
-      del.textContent = "Delete";
-      del.addEventListener("click", async () => {
-        if (!confirm("Delete this review permanently?")) return;
-        del.disabled = true;
-        const { error } = await reviewDb.from("reviews").delete().eq("id", item.id);
-        if (error) {
-          del.disabled = false;
-          alert("This review could not be deleted.");
-          return;
-        }
-        article.remove();
-        if (reviewsList && !reviewsList.children.length) reviewsEmpty.hidden = false;
-      });
-      article.append(del);
-    }
-
-    return article;
-  }
-
-  async function loadReviews() {
-    if (!reviewsList) return;
-    reviewsError.hidden = true;
-    const { data, error } = await reviewDb
-      .from("reviews")
-      .select("id,name,relationship,company_or_channel,rating,review,created_at")
-      .order("created_at", { ascending: false })
-      .limit(100);
-
-    if (error) {
-      reviewsError.hidden = false;
-      return;
-    }
-
-    reviewsList.replaceChildren(...(data || []).map(makeReviewCard));
-    reviewsEmpty.hidden = Boolean(data && data.length);
-  }
-
-  async function syncReviewOwnerMode() {
-    const { data: sessionData } = await reviewDb.auth.getSession();
-    const session = sessionData?.session;
-    reviewOwnerMode = false;
-
-    if (session) {
-      const { data, error } = await reviewDb.rpc("is_review_owner");
-      reviewOwnerMode = !error && data === true;
-    }
-
-    if (reviewAdminCopy) {
-      reviewAdminCopy.textContent = reviewOwnerMode
-        ? "Owner access is active. Delete buttons are now available beside reviews."
-        : "Sign in with your owner email. We’ll send you a secure sign-in link.";
-    }
-    if (reviewAdminForm) reviewAdminForm.hidden = reviewOwnerMode;
-    if (reviewAdminSignout) reviewAdminSignout.hidden = !session;
-    if (reviewAdminStatus && reviewOwnerMode) reviewAdminStatus.textContent = "Owner access confirmed.";
-    await loadReviews();
-  }
-
-  reviewManageButton?.addEventListener("click", async () => {
-    await syncReviewOwnerMode();
-    if (!reviewAdminDialog.open) reviewAdminDialog.showModal();
-  });
-  reviewAdminDialog?.querySelector("[data-close-review-admin]")?.addEventListener("click", () => reviewAdminDialog.close());
-  reviewAdminDialog?.addEventListener("click", event => {
-    if (event.target === reviewAdminDialog) reviewAdminDialog.close();
-  });
-
-  reviewAdminForm?.addEventListener("submit", async event => {
-    event.preventDefault();
-    const email = reviewAdminEmail.value.trim();
-    if (!email) return;
-    reviewAdminStatus.textContent = "Sending secure sign-in link…";
-    const { error } = await reviewDb.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: location.origin + location.pathname + "#review-us",
-        shouldCreateUser: true
-      }
-    });
-    reviewAdminStatus.textContent = error
-      ? "Could not send the sign-in link."
-      : "Check your email and open the secure sign-in link.";
-  });
-
-  reviewAdminSignout?.addEventListener("click", async () => {
-    await reviewDb.auth.signOut();
-    reviewAdminStatus.textContent = "Signed out.";
-    await syncReviewOwnerMode();
-  });
-
-  reviewDb.auth.onAuthStateChange(() => {
-    window.setTimeout(syncReviewOwnerMode, 0);
-  });
-
-  loadReviews();
-  window.setTimeout(syncReviewOwnerMode, 0);
-
   const reviewForm = document.querySelector("form[data-review]");
   if (reviewForm) {
     const reviewButton = reviewForm.querySelector(".review-submit-button");
@@ -3745,19 +3529,7 @@ body { font-size: 1.025rem; }
       const timeout = window.setTimeout(() => controller.abort(), 20000);
 
       try {
-        const publishResponse = await fetch(reviewSubmitEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(values),
-          signal: controller.signal
-        });
-        const publishResult = await publishResponse.json();
-        if (!publishResponse.ok || !publishResult?.success || !publishResult?.review) {
-          throw new Error(publishResult?.error || "Review could not be published");
-        }
-
-        // Email notification is best-effort; the database is the source of truth.
-        fetch(contactEndpoint, {
+        const response = await fetch(contactEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
@@ -3767,17 +3539,18 @@ body { font-size: 1.025rem; }
             from_name: "Nexora website",
             type: "review",
             replyto: values.email,
-            public_status: "PUBLISHED AUTOMATICALLY",
+            public_quote_permission: values.public_quote_permission === "yes" ? "YES — reviewer gave permission" : "NO — keep private",
             submittedAt: new Date().toISOString(),
             legalAcknowledgedAt: new Date().toISOString(),
             termsVersion: legalVersion,
             privacyPolicyVersion: legalVersion
-          })
-        }).catch(() => {});
+          }),
+          signal: controller.signal
+        });
+        const result = await response.json();
+        if (!response.ok || !result || typeof result !== "object" || result.success !== true) throw new Error("Submission unavailable");
 
-        await loadReviews();
         reviewForm.reset();
-        updateRatingUI();
         syncReviewSubmit();
         reviewForm.hidden = true;
         reviewSuccess.hidden = false;
@@ -3785,8 +3558,6 @@ body { font-size: 1.025rem; }
         if (activePage === "review-us") reviewSuccess.focus();
       } catch {
         reviewFeedback.hidden = false;
-        reviewFeedback.querySelector("strong").textContent = "We couldn’t publish your review.";
-        reviewFeedback.querySelector("p").textContent = "Your review is still here. Please try again in a moment.";
         reviewStatus.textContent = "";
         if (activePage === "review-us") reviewFeedback.focus();
       } finally {
