@@ -2105,8 +2105,8 @@ svg {
 .reviews-hero-copy h1{margin-bottom:20px}
 .reviews-hero-copy>p:last-child{max-width:620px}
 .reviews-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:6px}
-.reviews-actions p{margin:0;max-width:280px;font-size:.78rem;color:var(--muted)}
-.review-open-button{border:0;font:inherit;cursor:pointer}
+.reviews-actions p{margin:0;max-width:320px;font-size:.86rem;line-height:1.55;color:#625d6b;font-weight:500}
+.review-open-button{border:0!important;border-radius:999px!important;font:inherit;cursor:pointer;padding-inline:24px}
 .reviews-public{margin-top:68px}
 .reviews-section-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
 .reviews-section-heading h2{margin:0;font-size:clamp(1.8rem,3vw,2.7rem)}
@@ -2115,6 +2115,7 @@ svg {
 .review-empty-state h3{margin:5px 0 7px;font-size:1.15rem}
 .review-empty-state p{margin:0;max-width:620px}
 .review-empty-link{border:0;background:transparent;font:inherit;cursor:pointer;white-space:nowrap}
+.review-card [data-delete-review],.review-card .delete-review,.reviews-public [data-delete-review]{display:none!important}
 .review-dialog{width:min(760px,calc(100vw - 28px));max-width:760px;max-height:92vh;padding:0;border:0;border-radius:22px;background:transparent;overflow:visible}
 .review-dialog::backdrop{background:rgb(20 18 28 / .58);backdrop-filter:blur(7px)}
 .review-dialog-shell{position:relative;border-radius:22px;background:#fff;box-shadow:0 32px 90px rgb(20 18 28 / .28);overflow:hidden}
@@ -2740,7 +2741,7 @@ body { font-size: 1.025rem; }
           Leave a review
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </button>
-        <p>Reviews are checked before anything is published.</p>
+        <p>Every review is checked by Nexora before it appears publicly.</p>
       </div>
     </div>
 
