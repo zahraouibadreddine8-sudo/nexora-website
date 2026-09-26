@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Nexora</title>
+  <desc id="desc">Less noise. Better matches.</desc>
+  <rect width="1200" height="630" fill="#fcfcfa"/>
+  <circle cx="1035" cy="118" r="180" fill="#eeeaff"/>
+  <circle cx="1110" cy="525" r="245" fill="#f4f1ff"/>
+  <rect x="90" y="82" width="72" height="72" rx="18" fill="#6247e8"/>
+  <path d="M108 136V100h10l22 23v-23h10v36h-9l-23-23v23z" fill="#fff"/>
+  <text x="188" y="134" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" letter-spacing="9" fill="#181817">NEXORA</text>
+  <text x="90" y="330" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700" letter-spacing="-3" fill="#181817">Less noise.</text>
+  <text x="90" y="416" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700" letter-spacing="-3" fill="#6247e8">Better matches.</text>
+  <text x="94" y="505" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="#6f6f69">Marketing partnerships, considered.</text>
+</svg>
