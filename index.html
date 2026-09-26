@@ -2317,6 +2317,38 @@ button,
 .success-review-link{
   border-radius:999px!important;
 }
+
+.reviews-section-heading>div{display:grid;gap:5px}
+.review-manage-link{border:0;background:transparent;font:inherit;cursor:pointer;align-self:end}
+.reviews-list{display:grid}
+.review-card{display:grid;grid-template-columns:160px minmax(0,1fr) auto;gap:28px;padding:30px 0;border-bottom:1px solid var(--line)}
+.review-card-meta{display:grid;gap:7px;align-content:start}
+.review-card-stars{color:#6247e8;font-size:1.02rem;letter-spacing:.08em}
+.review-card-name{font-size:1rem;font-weight:700;color:var(--ink)}
+.review-card-context{font-size:.77rem;color:#6b6672}
+.review-card-copy{margin:0;max-width:760px;font-size:1rem;line-height:1.7;color:#2c2a31;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-card-date{display:block;margin-top:12px;font-size:.72rem;color:#8a8590}
+.review-delete{align-self:start;border:1px solid #ddd8e8;background:#fff;padding:8px 14px;font-size:.76rem;font-weight:650;cursor:pointer;color:#8a2931}
+.review-delete:hover{border-color:#c87880;background:#fff8f8}
+.reviews-load-error{padding:28px 0;color:#8a2931}
+.review-admin-dialog{width:min(520px,calc(100vw - 28px));padding:0;border:0;border-radius:22px;background:transparent}
+.review-admin-dialog::backdrop{background:rgb(20 18 28 / .58);backdrop-filter:blur(7px)}
+.review-admin-shell{position:relative;border-radius:22px;background:#fff;box-shadow:0 32px 90px rgb(20 18 28 / .28);overflow:hidden}
+.review-admin-content{padding:38px}
+.review-admin-content h2{margin:8px 0 12px;font-size:2rem}
+.review-admin-content>p{color:#625d6b;line-height:1.6}
+.review-admin-content form{display:grid;gap:12px;margin-top:22px}
+.review-admin-content label{font-size:.8rem;font-weight:650}
+.review-admin-content input{width:100%;padding:13px 15px;border:1px solid #d8d4e8;border-radius:14px;background:#fff;outline:none}
+.review-admin-content input:focus{border-color:#6247e8;box-shadow:0 0 0 3px rgb(98 71 232 / .1)}
+.review-admin-content form .action-link{justify-self:start}
+.review-admin-status{min-height:1.4em;margin-top:14px!important;font-size:.8rem}
+@media(max-width:720px){
+  .review-card{grid-template-columns:1fr;gap:12px}
+  .review-delete{justify-self:start}
+  .reviews-section-heading{align-items:flex-end}
+  .review-admin-content{padding:30px 20px}
+}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Nexora","description":"A marketing matchmaking agency helping brands find the right creators, specialists, agencies, brands, and partners for marketing opportunities, then coordinate the collaboration."}</script>
 
@@ -2749,27 +2781,32 @@ body { font-size: 1.025rem; }
           Leave a review
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </button>
-        <p>Every review is checked by Nexora before it appears publicly.</p>
+        <p>Reviews appear publicly after submission. Nexora may remove spam or inappropriate content.</p>
       </div>
     </div>
 
     <div class="reviews-public" aria-labelledby="published-reviews-title">
       <div class="reviews-section-heading">
-        <span class="small-label">Published feedback</span>
-        <h2 id="published-reviews-title">Reviews</h2>
+        <div>
+          <span class="small-label">Published feedback</span>
+          <h2 id="published-reviews-title">Reviews</h2>
+        </div>
+        <button class="text-link review-manage-link" type="button" data-review-manage>Manage reviews</button>
       </div>
-      <article class="review-empty-state">
+      <div class="reviews-list" data-reviews-list aria-live="polite"></div>
+      <article class="review-empty-state" data-review-empty hidden>
         <div class="review-empty-mark" aria-hidden="true">★</div>
         <div>
-          <p class="small-label">No published reviews yet</p>
-          <h3>There’s nothing public here yet.</h3>
-          <p>When a verified reviewer gives Nexora permission to quote their feedback publicly, it will appear here.</p>
+          <p class="small-label">No reviews yet</p>
+          <h3>Be the first to leave one.</h3>
+          <p>New reviews appear here automatically after they are submitted.</p>
         </div>
         <button class="text-link review-empty-link" type="button" data-open-review-dialog>
           Leave the first review
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </button>
       </article>
+      <p class="reviews-load-error" data-reviews-error hidden>Reviews could not be loaded right now. Please refresh and try again.</p>
     </div>
   </section>
 
@@ -2860,15 +2897,11 @@ body { font-size: 1.025rem; }
         <div class="legal-consent" data-legal-consent>
           <div class="legal-consent-copy">
             <span class="legal-consent-kicker">Before you send</span>
-            <p class="legal-consent-summary">Reviews must reflect a genuine experience. Submission does not guarantee that a review will be published.</p>
+            <p class="legal-consent-summary">Reviews must reflect a genuine experience. Reviews are published publicly after submission.</p>
           </div>
           <label class="legal-check" for="review-legal">
             <input id="review-legal" name="legal_acknowledgement" type="checkbox" required value="accepted">
-            <span>I confirm this review reflects my genuine experience, I am authorized to provide the information, and I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</span>
-          </label>
-          <label class="legal-check review-publish-check" for="review-publish">
-            <input id="review-publish" name="public_quote_permission" type="checkbox" value="yes">
-            <span>Optional: Nexora may quote this review publicly with my name and company/channel. Nexora may shorten it for length without changing its meaning.</span>
+            <span>I confirm this review reflects my genuine experience and understand that my name, relationship, company/channel (if provided), star rating, and review will be published publicly. My email stays private. I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</span>
           </label>
           <p class="legal-consent-note">Do not include confidential campaign terms, passwords, payment-card details, government IDs, health information, private analytics screenshots, or another person’s private information.</p>
           <span class="field-error legal-consent-error" id="review-legal-error" hidden></span>
@@ -2877,7 +2910,7 @@ body { font-size: 1.025rem; }
 
         <div class="form-actions">
           <button class="action-link action-primary submit-button review-submit-button" type="submit" disabled aria-disabled="true"><span>Send review</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
-          <p>Your feedback is sent privately to Nexora first.<br><a href="/privacy/">How review data is handled</a></p>
+          <p>Your review will appear publicly after you send it. Your email stays private.<br><a href="/privacy/">How review data is handled</a></p>
         </div>
         <p class="sr-only submission-status" role="status" aria-live="polite"></p>
         <div class="form-error" role="alert" tabindex="-1" hidden>
@@ -2890,11 +2923,36 @@ body { font-size: 1.025rem; }
         <span class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span>
         <p class="small-label">Review received</p>
         <h2>Thanks for the<br>feedback.</h2>
-        <p>We’ll keep it private unless you gave permission for Nexora to quote it publicly.</p>
+        <p>Your review is now published on the Nexora Reviews page.</p>
         <button class="text-link reset-review" type="button">Send another review <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></button>
       </div>
     </div>
 
+    </div>
+  </dialog>
+
+  <dialog class="review-admin-dialog" id="review-admin-dialog" aria-labelledby="review-admin-title">
+    <div class="review-admin-shell">
+      <button class="review-dialog-close" type="button" data-close-review-admin aria-label="Close review management">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      </button>
+      <div class="review-admin-content">
+        <p class="eyebrow"><span aria-hidden="true"></span>Owner access</p>
+        <h2 id="review-admin-title">Manage reviews</h2>
+        <p data-review-admin-copy>Enter the owner email to receive a one-time sign-in code.</p>
+        <form data-review-admin-email-form>
+          <label for="review-admin-email">Email</label>
+          <input id="review-admin-email" type="email" autocomplete="email" required>
+          <button class="action-link action-primary" type="submit">Send code</button>
+        </form>
+        <form data-review-admin-code-form hidden>
+          <label for="review-admin-code">6-digit code</label>
+          <input id="review-admin-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
+          <button class="action-link action-primary" type="submit">Sign in</button>
+        </form>
+        <p class="review-admin-status" data-review-admin-status aria-live="polite"></p>
+        <button class="text-link" type="button" data-review-admin-signout hidden>Sign out</button>
+      </div>
     </div>
   </dialog>
 </div>
@@ -3421,6 +3479,193 @@ body { font-size: 1.025rem; }
     });
   });
 
+  const REVIEW_DATABASE_URL = "https://ep-steep-butterfly-b5eri2z4.c-7.us-east-2.aws.neon.tech/neondb";
+  const REVIEW_OWNER_USER_ID = "072317e0-f1c8-4581-b505-e588d7c63311";
+  const reviewClientPromise = import("https://esm.sh/@neondatabase/neon-js").then(({ createClient }) =>
+    createClient(REVIEW_DATABASE_URL, { auth: { allowAnonymous: true } })
+  );
+  const reviewsList = document.querySelector("[data-reviews-list]");
+  const reviewsEmpty = document.querySelector("[data-review-empty]");
+  const reviewsError = document.querySelector("[data-reviews-error]");
+  const reviewManageButton = document.querySelector("[data-review-manage]");
+  const reviewAdminDialog = document.getElementById("review-admin-dialog");
+  const reviewAdminEmailForm = document.querySelector("[data-review-admin-email-form]");
+  const reviewAdminCodeForm = document.querySelector("[data-review-admin-code-form]");
+  const reviewAdminEmail = document.getElementById("review-admin-email");
+  const reviewAdminCode = document.getElementById("review-admin-code");
+  const reviewAdminStatus = document.querySelector("[data-review-admin-status]");
+  const reviewAdminCopy = document.querySelector("[data-review-admin-copy]");
+  const reviewAdminSignout = document.querySelector("[data-review-admin-signout]");
+  let reviewOwnerMode = false;
+  let reviewAdminPendingEmail = "";
+
+  const formatReviewDate = value => {
+    try {
+      return new Intl.DateTimeFormat(undefined, { year:"numeric", month:"short", day:"numeric" }).format(new Date(value));
+    } catch { return ""; }
+  };
+
+  const makeReviewCard = item => {
+    const article = document.createElement("article");
+    article.className = "review-card";
+    article.dataset.reviewId = item.id;
+
+    const meta = document.createElement("div");
+    meta.className = "review-card-meta";
+    const stars = document.createElement("div");
+    stars.className = "review-card-stars";
+    stars.setAttribute("aria-label", item.rating + " out of 5 stars");
+    stars.textContent = "★".repeat(Number(item.rating)) + "☆".repeat(5 - Number(item.rating));
+    const name = document.createElement("div");
+    name.className = "review-card-name";
+    name.textContent = item.name;
+    const context = document.createElement("div");
+    context.className = "review-card-context";
+    context.textContent = [item.relationship, item.company_or_channel].filter(Boolean).join(" · ");
+    meta.append(stars,name,context);
+
+    const body = document.createElement("div");
+    const copy = document.createElement("p");
+    copy.className = "review-card-copy";
+    copy.textContent = item.review;
+    const date = document.createElement("time");
+    date.className = "review-card-date";
+    date.dateTime = item.created_at || "";
+    date.textContent = formatReviewDate(item.created_at);
+    body.append(copy,date);
+
+    article.append(meta,body);
+
+    if (reviewOwnerMode) {
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "review-delete";
+      del.textContent = "Delete";
+      del.addEventListener("click", async () => {
+        if (!window.confirm("Delete this review permanently?")) return;
+        del.disabled = true;
+        try {
+          const client = await reviewClientPromise;
+          const { error } = await client.from("reviews").delete().eq("id", item.id);
+          if (error) throw error;
+          article.remove();
+          if (reviewsList && !reviewsList.children.length) reviewsEmpty.hidden = false;
+        } catch {
+          del.disabled = false;
+          window.alert("This review could not be deleted.");
+        }
+      });
+      article.append(del);
+    }
+
+    return article;
+  };
+
+  const loadReviews = async () => {
+    if (!reviewsList) return;
+    reviewsError.hidden = true;
+    try {
+      const client = await reviewClientPromise;
+      const { data, error } = await client
+        .from("reviews_public")
+        .select("id,name,relationship,company_or_channel,rating,review,created_at")
+        .order("created_at",{ascending:false})
+        .limit(100);
+      if (error) throw error;
+      reviewsList.replaceChildren(...(data || []).map(makeReviewCard));
+      reviewsEmpty.hidden = Boolean(data && data.length);
+    } catch {
+      reviewsError.hidden = false;
+    }
+  };
+
+  const syncReviewOwnerMode = async () => {
+    try {
+      const client = await reviewClientPromise;
+      const { data } = await client.auth.getSession();
+      const user = data?.user || data?.session?.user || null;
+      reviewOwnerMode = Boolean(user && user.id === REVIEW_OWNER_USER_ID);
+      reviewAdminEmailForm.hidden = reviewOwnerMode;
+      reviewAdminCodeForm.hidden = true;
+      reviewAdminSignout.hidden = !user;
+      reviewAdminCopy.textContent = reviewOwnerMode
+        ? "Owner access is active. Delete buttons are now available beside each review."
+        : "Enter the owner email to receive a one-time sign-in code.";
+      if (reviewOwnerMode) reviewAdminStatus.textContent = "Owner access confirmed.";
+      await loadReviews();
+    } catch {
+      reviewOwnerMode = false;
+    }
+  };
+
+  reviewManageButton?.addEventListener("click", async () => {
+    await syncReviewOwnerMode();
+    if (!reviewAdminDialog.open) reviewAdminDialog.showModal();
+  });
+  reviewAdminDialog?.querySelector("[data-close-review-admin]")?.addEventListener("click", () => reviewAdminDialog.close());
+  reviewAdminDialog?.addEventListener("click", event => {
+    if (event.target === reviewAdminDialog) reviewAdminDialog.close();
+  });
+
+  reviewAdminEmailForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    reviewAdminPendingEmail = reviewAdminEmail.value.trim();
+    if (!reviewAdminPendingEmail) return;
+    reviewAdminStatus.textContent = "Sending code…";
+    try {
+      const client = await reviewClientPromise;
+      const { error } = await client.auth.emailOtp.sendVerificationOtp({
+        email: reviewAdminPendingEmail,
+        type: "sign-in"
+      });
+      if (error) throw error;
+      reviewAdminEmailForm.hidden = true;
+      reviewAdminCodeForm.hidden = false;
+      reviewAdminStatus.textContent = "Check your email for the one-time code.";
+      reviewAdminCode.focus();
+    } catch {
+      reviewAdminStatus.textContent = "Could not send a sign-in code.";
+    }
+  });
+
+  reviewAdminCodeForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const otp = reviewAdminCode.value.trim();
+    if (!otp || !reviewAdminPendingEmail) return;
+    reviewAdminStatus.textContent = "Signing in…";
+    try {
+      const client = await reviewClientPromise;
+      const { data, error } = await client.auth.signIn.emailOtp({
+        email: reviewAdminPendingEmail,
+        otp
+      });
+      if (error) throw error;
+      const user = data?.user || data?.session?.user || null;
+      if (!user || user.id !== REVIEW_OWNER_USER_ID) {
+        await client.auth.signOut();
+        throw new Error("Not owner");
+      }
+      reviewAdminCode.value = "";
+      await syncReviewOwnerMode();
+    } catch {
+      reviewAdminStatus.textContent = "That code or account is not authorized.";
+    }
+  });
+
+  reviewAdminSignout?.addEventListener("click", async () => {
+    try {
+      const client = await reviewClientPromise;
+      await client.auth.signOut();
+    } catch {}
+    reviewAdminStatus.textContent = "Signed out.";
+    reviewAdminEmailForm.hidden = false;
+    reviewAdminCodeForm.hidden = true;
+    await syncReviewOwnerMode();
+  });
+
+  loadReviews();
+  window.setTimeout(syncReviewOwnerMode,0);
+
   const reviewDialog = document.getElementById("review-dialog");
   if (reviewDialog) {
     const reviewDialogOpeners = Array.from(document.querySelectorAll("[data-open-review-dialog]"));
@@ -3525,11 +3770,19 @@ body { font-size: 1.025rem; }
       reviewButton.innerHTML = `<span>Sending review</span>${loadingIcon}`;
       reviewStatus.textContent = "Sending your review.";
 
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 20000);
-
       try {
-        const response = await fetch(contactEndpoint, {
+        const client = await reviewClientPromise;
+        const { error: publishError } = await client.from("reviews").insert({
+          name: values.name,
+          email_private: values.email,
+          relationship: values.relationship,
+          company_or_channel: values.company_or_channel || null,
+          rating: Number(values.rating),
+          review: values.review
+        });
+        if (publishError) throw publishError;
+
+        fetch(contactEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
@@ -3539,29 +3792,29 @@ body { font-size: 1.025rem; }
             from_name: "Nexora website",
             type: "review",
             replyto: values.email,
-            public_quote_permission: values.public_quote_permission === "yes" ? "YES — reviewer gave permission" : "NO — keep private",
+            public_status: "PUBLISHED AUTOMATICALLY",
             submittedAt: new Date().toISOString(),
             legalAcknowledgedAt: new Date().toISOString(),
             termsVersion: legalVersion,
             privacyPolicyVersion: legalVersion
-          }),
-          signal: controller.signal
-        });
-        const result = await response.json();
-        if (!response.ok || !result || typeof result !== "object" || result.success !== true) throw new Error("Submission unavailable");
+          })
+        }).catch(() => {});
 
+        await loadReviews();
         reviewForm.reset();
+        updateRatingUI();
         syncReviewSubmit();
         reviewForm.hidden = true;
         reviewSuccess.hidden = false;
         reviewStatus.textContent = "";
         if (activePage === "review-us") reviewSuccess.focus();
       } catch {
+        reviewFeedback.querySelector("strong").textContent = "We couldn’t publish your review.";
+        reviewFeedback.querySelector("p").textContent = "Your review is still here. Please try again in a moment.";
         reviewFeedback.hidden = false;
         reviewStatus.textContent = "";
         if (activePage === "review-us") reviewFeedback.focus();
       } finally {
-        window.clearTimeout(timeout);
         reviewSending = false;
         reviewFieldset.disabled = false;
         syncReviewSubmit();
