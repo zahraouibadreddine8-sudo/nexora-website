@@ -3479,9 +3479,6 @@ body { font-size: 1.025rem; }
   const REVIEW_API_URL = "/api/reviews";
   const REVIEW_AUTH_URL = "https://ep-steep-butterfly-b5eri2z4.neonauth.c-7.us-east-2.aws.neon.tech/neondb/auth";
   const REVIEW_OWNER_EMAIL = "zahraouibadreddine8@gmail.com";
-  const reviewAuthPromise = import("https://esm.sh/@neondatabase/auth@0.5.0-beta?bundle").then(({ createAuthClient }) =>
-    createAuthClient(REVIEW_AUTH_URL)
-  );
   const reviewsList = document.querySelector("[data-reviews-list]");
   const reviewsEmpty = document.querySelector("[data-review-empty]");
   const reviewsError = document.querySelector("[data-reviews-error]");
@@ -3539,9 +3536,14 @@ body { font-size: 1.025rem; }
         if (!window.confirm("Delete this review permanently?")) return;
         del.disabled = true;
         try {
-          const auth = await reviewAuthPromise;
-          const token = await auth.getJWTToken?.();
-          if (!token) throw new Error("No owner token");
+          const tokenResponse = await fetch(REVIEW_AUTH_URL + "/token", {
+            method: "GET",
+            credentials: "include",
+            headers: { Accept: "application/json" }
+          });
+          const tokenData = await tokenResponse.json().catch(() => ({}));
+          const token = tokenData?.token;
+          if (!tokenResponse.ok || !token) throw new Error("No owner token");
           const response = await fetch(REVIEW_API_URL + "?id=" + encodeURIComponent(item.id), {
             method: "DELETE",
             headers: { Authorization: "Bearer " + token }
@@ -3580,9 +3582,13 @@ body { font-size: 1.025rem; }
 
   const syncReviewOwnerMode = async () => {
     try {
-      const auth = await reviewAuthPromise;
-      const { data } = await auth.getSession();
-      const user = data?.user || data?.session?.user || null;
+      const response = await fetch(REVIEW_AUTH_URL + "/get-session", {
+        method: "GET",
+        credentials: "include",
+        headers: { Accept: "application/json" }
+      });
+      const sessionData = response.ok ? await response.json().catch(() => null) : null;
+      const user = sessionData?.user || null;
       const email = String(user?.email || "").toLowerCase();
       reviewOwnerMode = Boolean(user && email === REVIEW_OWNER_EMAIL);
       reviewGoogleSignIn.hidden = reviewOwnerMode;
@@ -3596,8 +3602,10 @@ body { font-size: 1.025rem; }
           ? "This Google account is not authorized to manage Nexora reviews."
           : "";
       await loadReviews();
+      return reviewOwnerMode;
     } catch {
       reviewOwnerMode = false;
+      return false;
     }
   };
 
@@ -3612,28 +3620,59 @@ body { font-size: 1.025rem; }
 
   reviewGoogleSignIn?.addEventListener("click", async () => {
     reviewAdminStatus.textContent = "Opening Google sign-in…";
+    reviewGoogleSignIn.disabled = true;
     try {
-      const auth = await reviewAuthPromise;
-      await auth.signIn.social({
-        provider: "google",
-        callbackURL: location.origin + location.pathname + "#review-us"
+      const callbackURL = location.origin + location.pathname + "?reviewAdmin=1#review-us";
+      const response = await fetch(REVIEW_AUTH_URL + "/sign-in/social", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          provider: "google",
+          callbackURL,
+          disableRedirect: true
+        })
       });
-    } catch {
-      reviewAdminStatus.textContent = "Google sign-in could not be started.";
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result?.url) {
+        throw new Error(result?.message || result?.error || "OAuth URL unavailable");
+      }
+      location.assign(result.url);
+    } catch (error) {
+      console.error("Nexora admin Google sign-in failed", error);
+      reviewAdminStatus.textContent = "Google sign-in could not be started. Please try again.";
+      reviewGoogleSignIn.disabled = false;
     }
   });
 
   reviewAdminSignout?.addEventListener("click", async () => {
     try {
-      const auth = await reviewAuthPromise;
-      await auth.signOut();
+      await fetch(REVIEW_AUTH_URL + "/sign-out", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: "{}"
+      });
     } catch {}
     reviewAdminStatus.textContent = "Signed out.";
     await syncReviewOwnerMode();
   });
 
   loadReviews();
-  window.setTimeout(syncReviewOwnerMode,0);
+  window.setTimeout(async () => {
+    const owner = await syncReviewOwnerMode();
+    const params = new URLSearchParams(location.search);
+    if (params.get("reviewAdmin") === "1") {
+      if (!reviewAdminDialog.open) reviewAdminDialog.showModal();
+      if (owner) reviewAdminStatus.textContent = "Signed in as " + REVIEW_OWNER_EMAIL;
+      params.delete("reviewAdmin");
+      const next = location.pathname + (params.toString() ? "?" + params.toString() : "") + location.hash;
+      history.replaceState(history.state, "", next);
+    }
+  },0);
 
   const reviewDialog = document.getElementById("review-dialog");
   if (reviewDialog) {
