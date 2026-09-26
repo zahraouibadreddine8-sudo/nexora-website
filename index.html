@@ -3479,8 +3479,8 @@ body { font-size: 1.025rem; }
   const REVIEW_API_URL = "/api/reviews";
   const REVIEW_AUTH_URL = "https://ep-steep-butterfly-b5eri2z4.neonauth.c-7.us-east-2.aws.neon.tech/neondb/auth";
   const REVIEW_OWNER_EMAIL = "zahraouibadreddine8@gmail.com";
-  const reviewAuthPromise = import("https://esm.sh/@neondatabase/neon-js/auth").then(({ createAuthClient }) =>
-    createAuthClient(REVIEW_AUTH_URL, { fetchOptions: { credentials: "include" } })
+  const reviewAuthPromise = import("https://esm.sh/@neondatabase/auth@0.5.0-beta?bundle").then(({ createAuthClient }) =>
+    createAuthClient(REVIEW_AUTH_URL)
   );
   const reviewsList = document.querySelector("[data-reviews-list]");
   const reviewsEmpty = document.querySelector("[data-review-empty]");
@@ -3540,11 +3540,11 @@ body { font-size: 1.025rem; }
         del.disabled = true;
         try {
           const auth = await reviewAuthPromise;
-          const { data: tokenData, error: tokenError } = await auth.token();
-          if (tokenError || !tokenData?.token) throw tokenError || new Error("No owner token");
+          const token = await auth.getJWTToken?.();
+          if (!token) throw new Error("No owner token");
           const response = await fetch(REVIEW_API_URL + "?id=" + encodeURIComponent(item.id), {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + tokenData.token }
+            headers: { Authorization: "Bearer " + token }
           });
           if (!response.ok) throw new Error("Delete failed");
           article.remove();
