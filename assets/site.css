@@ -2840,7 +2840,6 @@ body { font-size: 1.025rem; }
   .reviews-public { margin-top: 44px; }
   .reviews-section-heading { align-items: end; gap: 16px; }
   .review-card { grid-template-columns: 1fr; gap: 12px; padding: 24px 0; }
-  .review-delete { justify-self: start; }
 
   /* Contact / forms */
   .contact-layout { grid-template-columns: 1fr; gap: 34px; padding-block: 42px 54px; }
