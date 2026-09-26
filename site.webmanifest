@@ -1,0 +1,16 @@
+{
+  "name": "Nexora",
+  "short_name": "Nexora",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fcfcfa",
+  "theme_color": "#fcfcfa",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
