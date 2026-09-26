@@ -14,6 +14,8 @@ export default async function handler(req, res) {
 
     const headers = { Accept: "application/json" };
     if (req.headers.authorization) headers.Authorization = req.headers.authorization;
+    if (req.headers["x-forwarded-for"]) headers["X-Forwarded-For"] = String(req.headers["x-forwarded-for"]);
+    if (req.headers["x-real-ip"]) headers["X-Real-IP"] = String(req.headers["x-real-ip"]);
     if (req.method === "POST") headers["Content-Type"] = "application/json";
 
     const upstream = await fetch(target, {
