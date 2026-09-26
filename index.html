@@ -3479,10 +3479,11 @@ body { font-size: 1.025rem; }
     });
   });
 
-  const REVIEW_DATABASE_URL = "https://ep-steep-butterfly-b5eri2z4.c-7.us-east-2.aws.neon.tech/neondb";
+  const REVIEW_API_URL = "https://br-round-sound-b5yltn6q-reviews.compute.c-7.us-east-2.aws.neon.tech/";
+  const REVIEW_AUTH_URL = "https://ep-steep-butterfly-b5eri2z4.neonauth.c-7.us-east-2.aws.neon.tech/neondb/auth";
   const REVIEW_OWNER_USER_ID = "072317e0-f1c8-4581-b505-e588d7c63311";
-  const reviewClientPromise = import("https://esm.sh/@neondatabase/neon-js").then(({ createClient }) =>
-    createClient(REVIEW_DATABASE_URL, { auth: { allowAnonymous: true } })
+  const reviewAuthPromise = import("https://esm.sh/@neondatabase/neon-js/auth").then(({ createAuthClient }) =>
+    createAuthClient(REVIEW_AUTH_URL, { fetchOptions: { credentials: "include" } })
   );
   const reviewsList = document.querySelector("[data-reviews-list]");
   const reviewsEmpty = document.querySelector("[data-review-empty]");
@@ -3545,9 +3546,14 @@ body { font-size: 1.025rem; }
         if (!window.confirm("Delete this review permanently?")) return;
         del.disabled = true;
         try {
-          const client = await reviewClientPromise;
-          const { error } = await client.from("reviews").delete().eq("id", item.id);
-          if (error) throw error;
+          const auth = await reviewAuthPromise;
+          const { data: tokenData, error: tokenError } = await auth.token();
+          if (tokenError || !tokenData?.token) throw tokenError || new Error("No owner token");
+          const response = await fetch(REVIEW_API_URL + "?id=" + encodeURIComponent(item.id), {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + tokenData.token }
+          });
+          if (!response.ok) throw new Error("Delete failed");
           article.remove();
           if (reviewsList && !reviewsList.children.length) reviewsEmpty.hidden = false;
         } catch {
@@ -3565,15 +3571,15 @@ body { font-size: 1.025rem; }
     if (!reviewsList) return;
     reviewsError.hidden = true;
     try {
-      const client = await reviewClientPromise;
-      const { data, error } = await client
-        .from("reviews_public")
-        .select("id,name,relationship,company_or_channel,rating,review,created_at")
-        .order("created_at",{ascending:false})
-        .limit(100);
-      if (error) throw error;
-      reviewsList.replaceChildren(...(data || []).map(makeReviewCard));
-      reviewsEmpty.hidden = Boolean(data && data.length);
+      const response = await fetch(REVIEW_API_URL, {
+        method: "GET",
+        headers: { Accept: "application/json" }
+      });
+      if (!response.ok) throw new Error("Review load failed");
+      const result = await response.json();
+      const data = Array.isArray(result?.reviews) ? result.reviews : [];
+      reviewsList.replaceChildren(...data.map(makeReviewCard));
+      reviewsEmpty.hidden = Boolean(data.length);
     } catch {
       reviewsError.hidden = false;
     }
@@ -3581,8 +3587,8 @@ body { font-size: 1.025rem; }
 
   const syncReviewOwnerMode = async () => {
     try {
-      const client = await reviewClientPromise;
-      const { data } = await client.auth.getSession();
+      const auth = await reviewAuthPromise;
+      const { data } = await auth.getSession();
       const user = data?.user || data?.session?.user || null;
       reviewOwnerMode = Boolean(user && user.id === REVIEW_OWNER_USER_ID);
       reviewAdminEmailForm.hidden = reviewOwnerMode;
@@ -3613,8 +3619,8 @@ body { font-size: 1.025rem; }
     if (!reviewAdminPendingEmail) return;
     reviewAdminStatus.textContent = "Sending code…";
     try {
-      const client = await reviewClientPromise;
-      const { error } = await client.auth.emailOtp.sendVerificationOtp({
+      const auth = await reviewAuthPromise;
+      const { error } = await auth.emailOtp.sendVerificationOtp({
         email: reviewAdminPendingEmail,
         type: "sign-in"
       });
@@ -3634,15 +3640,15 @@ body { font-size: 1.025rem; }
     if (!otp || !reviewAdminPendingEmail) return;
     reviewAdminStatus.textContent = "Signing in…";
     try {
-      const client = await reviewClientPromise;
-      const { data, error } = await client.auth.signIn.emailOtp({
+      const auth = await reviewAuthPromise;
+      const { data, error } = await auth.signIn.emailOtp({
         email: reviewAdminPendingEmail,
         otp
       });
       if (error) throw error;
       const user = data?.user || data?.session?.user || null;
       if (!user || user.id !== REVIEW_OWNER_USER_ID) {
-        await client.auth.signOut();
+        await auth.signOut();
         throw new Error("Not owner");
       }
       reviewAdminCode.value = "";
@@ -3654,8 +3660,8 @@ body { font-size: 1.025rem; }
 
   reviewAdminSignout?.addEventListener("click", async () => {
     try {
-      const client = await reviewClientPromise;
-      await client.auth.signOut();
+      const auth = await reviewAuthPromise;
+      await auth.signOut();
     } catch {}
     reviewAdminStatus.textContent = "Signed out.";
     reviewAdminEmailForm.hidden = false;
@@ -3771,16 +3777,15 @@ body { font-size: 1.025rem; }
       reviewStatus.textContent = "Sending your review.";
 
       try {
-        const client = await reviewClientPromise;
-        const { error: publishError } = await client.from("reviews").insert({
-          name: values.name,
-          email_private: values.email,
-          relationship: values.relationship,
-          company_or_channel: values.company_or_channel || null,
-          rating: Number(values.rating),
-          review: values.review
+        const publishResponse = await fetch(REVIEW_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(values)
         });
-        if (publishError) throw publishError;
+        const publishResult = await publishResponse.json().catch(() => ({}));
+        if (!publishResponse.ok || !publishResult?.success) {
+          throw new Error(publishResult?.error || "Review could not be published");
+        }
 
         fetch(contactEndpoint, {
           method: "POST",
