@@ -2,7 +2,7 @@
   "use strict";
   const contactEndpoint = "https://api.web3forms.com/submit";
   const contactAccessKey = "32b2e5f2-5b4f-456c-be87-1b58b6057fdc";
-  const legalVersion = "2026-09-19";
+  const legalVersion = "2026-09-26";
   const attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
 
   function cleanAttributionValue(value, maxLength = 180) {
@@ -94,8 +94,24 @@
     "for-brands": "Find the right people and partners for your marketing goal. Nexora researches, qualifies, and helps coordinate the collaboration.",
     "for-creators": "Connect with relevant paid brand opportunities. Nexora coordinates the campaign and commercial details; you decide which partnerships to accept.",
     faq: "Answers to common questions about Nexora campaigns, creators, response times, payments, usage rights, and how working together starts.",
-    "review-us": "Worked with Nexora? Share genuine feedback privately and choose whether Nexora may quote it publicly.",
+    "review-us": "Worked with Nexora? Share a genuine public review. Your email is kept private and is not displayed with the review.",
     contact: "Tell Nexora about your campaign, introduce your creator channel, or ask a question about working together."
+  };
+  const pageUrls = {
+    home: "/",
+    "for-brands": "/brands/",
+    "for-creators": "/creators/",
+    faq: "/faq/",
+    "review-us": "/reviews/",
+    contact: "/contact/"
+  };
+  const pathPages = {
+    "/": "home",
+    "/brands": "for-brands",
+    "/creators": "for-creators",
+    "/faq": "faq",
+    "/reviews": "review-us",
+    "/contact": "contact"
   };
   let activePage = "home";
   let activeType = "brand";
@@ -123,8 +139,12 @@
   }
 
   function showRoute(initial = false) {
+    const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
+    const pathPage = pathPages[normalizedPath] || "";
     let fragment;
-    try { fragment = decodeURIComponent(location.hash.slice(1)); } catch { fragment = "home"; }
+    try { fragment = decodeURIComponent(location.hash.slice(1)); } catch { fragment = ""; }
+    if (!fragment && pathPage) fragment = pathPage;
+    if (!fragment) fragment = "home";
     const contactMatch = fragment.match(/^contact(?:\/(brand|creator|other))?$/);
     const target = document.getElementById(fragment);
     const page = contactMatch ? "contact" : target?.closest("[data-page]")?.dataset.page || (pages.some(item => item.id === fragment) ? fragment : fragment === "main-content" ? activePage : "home");
@@ -139,10 +159,16 @@
     document.title = titles[page];
     for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) document.querySelector(selector).content = descriptions[page];
     for (const selector of ['meta[property="og:title"]', 'meta[name="twitter:title"]']) document.querySelector(selector).content = titles[page];
+    const canonicalUrl = new URL(pageUrls[page] || "/", location.origin).href;
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (canonical) canonical.href = canonicalUrl;
+    if (ogUrl) ogUrl.content = canonicalUrl;
     document.querySelectorAll(".site-header a,.mobile-menu a,.site-footer nav a").forEach(link => {
       const href = link.getAttribute("href");
-      if (href === `#${page}` && page !== "home") link.setAttribute("aria-current", "page");
-      else if (href === `#${fragment}` && ["about", "how-it-works"].includes(fragment)) link.setAttribute("aria-current", "location");
+      if (href === pageUrls[page] && page !== "home") link.setAttribute("aria-current", "page");
+      else if (href === "/" && page === "home" && !["about","how-it-works","our-approach"].includes(fragment)) link.setAttribute("aria-current", "page");
+      else if (href === `/#${fragment}` && ["about", "how-it-works", "our-approach"].includes(fragment)) link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
     });
     closeMenu();
@@ -187,7 +213,7 @@
   tabs.forEach((tab, index) => {
     tab.addEventListener("click", () => {
       chooseType(tab.dataset.type);
-      history.replaceState(null, "", `#contact/${activeType}`);
+      history.replaceState(null, "", `/contact/?type=${activeType}`);
     });
     tab.addEventListener("keydown", event => {
       let next;
@@ -198,7 +224,7 @@
       else return;
       event.preventDefault();
       chooseType(tabs[next].dataset.type, true);
-      history.replaceState(null, "", `#contact/${activeType}`);
+      history.replaceState(null, "", `/contact/?type=${activeType}`);
     });
   });
 
