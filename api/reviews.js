@@ -1,19 +1,14 @@
 const NEON_REVIEW_FUNCTION = "https://br-round-sound-b5yltn6q-reviews.compute.c-7.us-east-2.aws.neon.tech/";
 
 export default async function handler(req, res) {
-  if (!["GET", "POST", "DELETE"].includes(req.method)) {
-    res.setHeader("Allow", "GET, POST, DELETE");
+  if (!["GET", "POST"].includes(req.method)) {
+    res.setHeader("Allow", "GET, POST");
     return res.status(405).json({ success: false, error: "Method not allowed." });
   }
 
   try {
     const target = new URL(NEON_REVIEW_FUNCTION);
-    if (req.method === "DELETE" && req.query?.id) {
-      target.searchParams.set("id", String(req.query.id));
-    }
-
     const headers = { Accept: "application/json" };
-    if (req.headers.authorization) headers.Authorization = req.headers.authorization;
     if (req.headers["x-forwarded-for"]) headers["X-Forwarded-For"] = String(req.headers["x-forwarded-for"]);
     if (req.headers["x-real-ip"]) headers["X-Real-IP"] = String(req.headers["x-real-ip"]);
     if (req.method === "POST") headers["Content-Type"] = "application/json";
