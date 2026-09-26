@@ -7,7 +7,7 @@
   "theme_color": "#fcfcfa",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/icon.svg?v=6",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
