@@ -2349,6 +2349,9 @@ button,
   .reviews-section-heading{align-items:flex-end}
   .review-admin-content{padding:30px 20px}
 }
+
+.review-google-signin{display:inline-flex;align-items:center;gap:10px;margin-top:22px}
+.google-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#242228;font-weight:800;font-size:.82rem}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Nexora","description":"A marketing matchmaking agency helping brands find the right creators, specialists, agencies, brands, and partners for marketing opportunities, then coordinate the collaboration."}</script>
 
@@ -2939,17 +2942,11 @@ body { font-size: 1.025rem; }
       <div class="review-admin-content">
         <p class="eyebrow"><span aria-hidden="true"></span>Owner access</p>
         <h2 id="review-admin-title">Manage reviews</h2>
-        <p data-review-admin-copy>Enter the owner email to receive a one-time sign-in code.</p>
-        <form data-review-admin-email-form>
-          <label for="review-admin-email">Email</label>
-          <input id="review-admin-email" type="email" autocomplete="email" required>
-          <button class="action-link action-primary" type="submit">Send code</button>
-        </form>
-        <form data-review-admin-code-form hidden>
-          <label for="review-admin-code">6-digit code</label>
-          <input id="review-admin-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
-          <button class="action-link action-primary" type="submit">Sign in</button>
-        </form>
+        <p data-review-admin-copy>Sign in with the Nexora owner Google account to manage published reviews.</p>
+        <button class="action-link action-primary review-google-signin" type="button" data-review-google-signin>
+          <span class="google-mark" aria-hidden="true">G</span>
+          Continue with Google
+        </button>
         <p class="review-admin-status" data-review-admin-status aria-live="polite"></p>
         <button class="text-link" type="button" data-review-admin-signout hidden>Sign out</button>
       </div>
@@ -3481,7 +3478,7 @@ body { font-size: 1.025rem; }
 
   const REVIEW_API_URL = "/api/reviews";
   const REVIEW_AUTH_URL = "https://ep-steep-butterfly-b5eri2z4.neonauth.c-7.us-east-2.aws.neon.tech/neondb/auth";
-  const REVIEW_OWNER_USER_ID = "072317e0-f1c8-4581-b505-e588d7c63311";
+  const REVIEW_OWNER_EMAIL = "zahraouibadreddine8@gmail.com";
   const reviewAuthPromise = import("https://esm.sh/@neondatabase/neon-js/auth").then(({ createAuthClient }) =>
     createAuthClient(REVIEW_AUTH_URL, { fetchOptions: { credentials: "include" } })
   );
@@ -3490,15 +3487,11 @@ body { font-size: 1.025rem; }
   const reviewsError = document.querySelector("[data-reviews-error]");
   const reviewManageButton = document.querySelector("[data-review-manage]");
   const reviewAdminDialog = document.getElementById("review-admin-dialog");
-  const reviewAdminEmailForm = document.querySelector("[data-review-admin-email-form]");
-  const reviewAdminCodeForm = document.querySelector("[data-review-admin-code-form]");
-  const reviewAdminEmail = document.getElementById("review-admin-email");
-  const reviewAdminCode = document.getElementById("review-admin-code");
+  const reviewGoogleSignIn = document.querySelector("[data-review-google-signin]");
   const reviewAdminStatus = document.querySelector("[data-review-admin-status]");
   const reviewAdminCopy = document.querySelector("[data-review-admin-copy]");
   const reviewAdminSignout = document.querySelector("[data-review-admin-signout]");
   let reviewOwnerMode = false;
-  let reviewAdminPendingEmail = "";
 
   const formatReviewDate = value => {
     try {
@@ -3590,14 +3583,18 @@ body { font-size: 1.025rem; }
       const auth = await reviewAuthPromise;
       const { data } = await auth.getSession();
       const user = data?.user || data?.session?.user || null;
-      reviewOwnerMode = Boolean(user && user.id === REVIEW_OWNER_USER_ID);
-      reviewAdminEmailForm.hidden = reviewOwnerMode;
-      reviewAdminCodeForm.hidden = true;
+      const email = String(user?.email || "").toLowerCase();
+      reviewOwnerMode = Boolean(user && email === REVIEW_OWNER_EMAIL);
+      reviewGoogleSignIn.hidden = reviewOwnerMode;
       reviewAdminSignout.hidden = !user;
       reviewAdminCopy.textContent = reviewOwnerMode
-        ? "Owner access is active. Delete buttons are now available beside each review."
-        : "Enter the owner email to receive a one-time sign-in code.";
-      if (reviewOwnerMode) reviewAdminStatus.textContent = "Owner access confirmed.";
+        ? "Owner access is active. You can delete any review from this page."
+        : "Sign in with the Nexora owner Google account to manage published reviews.";
+      reviewAdminStatus.textContent = reviewOwnerMode
+        ? "Signed in as " + email
+        : user
+          ? "This Google account is not authorized to manage Nexora reviews."
+          : "";
       await loadReviews();
     } catch {
       reviewOwnerMode = false;
@@ -3613,48 +3610,16 @@ body { font-size: 1.025rem; }
     if (event.target === reviewAdminDialog) reviewAdminDialog.close();
   });
 
-  reviewAdminEmailForm?.addEventListener("submit", async event => {
-    event.preventDefault();
-    reviewAdminPendingEmail = reviewAdminEmail.value.trim();
-    if (!reviewAdminPendingEmail) return;
-    reviewAdminStatus.textContent = "Sending code…";
+  reviewGoogleSignIn?.addEventListener("click", async () => {
+    reviewAdminStatus.textContent = "Opening Google sign-in…";
     try {
       const auth = await reviewAuthPromise;
-      const { error } = await auth.emailOtp.sendVerificationOtp({
-        email: reviewAdminPendingEmail,
-        type: "sign-in"
+      await auth.signIn.social({
+        provider: "google",
+        callbackURL: location.origin + location.pathname + "#review-us"
       });
-      if (error) throw error;
-      reviewAdminEmailForm.hidden = true;
-      reviewAdminCodeForm.hidden = false;
-      reviewAdminStatus.textContent = "Check your email for the one-time code.";
-      reviewAdminCode.focus();
     } catch {
-      reviewAdminStatus.textContent = "Could not send a sign-in code.";
-    }
-  });
-
-  reviewAdminCodeForm?.addEventListener("submit", async event => {
-    event.preventDefault();
-    const otp = reviewAdminCode.value.trim();
-    if (!otp || !reviewAdminPendingEmail) return;
-    reviewAdminStatus.textContent = "Signing in…";
-    try {
-      const auth = await reviewAuthPromise;
-      const { data, error } = await auth.signIn.emailOtp({
-        email: reviewAdminPendingEmail,
-        otp
-      });
-      if (error) throw error;
-      const user = data?.user || data?.session?.user || null;
-      if (!user || user.id !== REVIEW_OWNER_USER_ID) {
-        await auth.signOut();
-        throw new Error("Not owner");
-      }
-      reviewAdminCode.value = "";
-      await syncReviewOwnerMode();
-    } catch {
-      reviewAdminStatus.textContent = "That code or account is not authorized.";
+      reviewAdminStatus.textContent = "Google sign-in could not be started.";
     }
   });
 
@@ -3664,8 +3629,6 @@ body { font-size: 1.025rem; }
       await auth.signOut();
     } catch {}
     reviewAdminStatus.textContent = "Signed out.";
-    reviewAdminEmailForm.hidden = false;
-    reviewAdminCodeForm.hidden = true;
     await syncReviewOwnerMode();
   });
 
